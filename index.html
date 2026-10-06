@@ -39,48 +39,145 @@ body {
 
     background:
         radial-gradient(
-            circle at 50% 40%,
-            #f5f5f5 0%,
-            #e1e1e1 50%,
-            #c8c8c8 100%
+            circle at 50% 42%,
+            #3a3a3a 0%,
+            #1d1d1d 48%,
+            #0b0b0b 100%
         );
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    color: #111;
+    color: white;
 }
 
 
-/* Contenido provisional */
+/* =====================================================
+   DETALLES INDUSTRIALES DEL FONDO
+===================================================== */
 
-.contenido {
-    text-align: center;
-}
+.pagina::before {
 
-.contenido h1 {
+    content: "";
 
-    font-size:
-        clamp(
-            100px,
-            18vw,
-            260px
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.025) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255,255,255,.025) 50%,
+            rgba(255,255,255,.025) 75%,
+            transparent 75%
         );
 
-    font-weight: 900;
+    background-size:
+        8px 8px;
 
-    letter-spacing: -12px;
+    opacity: .35;
+
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   CONTENIDO PRINCIPAL
+===================================================== */
+
+.contenido {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
 
 }
 
-.contenido p {
 
-    margin-top: 10px;
+/* =====================================================
+   LOGO PRINCIPAL JOS3
+===================================================== */
 
-    font-size: 18px;
+.logo-principal {
 
-    letter-spacing: 6px;
+    width:
+        min(
+            620px,
+            72vw
+        );
+
+    max-height: 45vh;
+
+    object-fit: contain;
+
+    filter:
+        drop-shadow(
+            0 15px 35px
+            rgba(
+                0,
+                0,
+                0,
+                .65
+            )
+        );
+
+}
+
+
+/* =====================================================
+   TEXTO INFERIOR PROVISIONAL
+===================================================== */
+
+.subtitulo {
+
+    margin-top: 35px;
+
+    font-size: 13px;
+
+    letter-spacing: 8px;
+
+    text-transform: uppercase;
+
+    color: #aaa;
+
+    opacity: .65;
+
+}
+
+
+/* =====================================================
+   LÍNEA INDUSTRIAL
+===================================================== */
+
+.linea {
+
+    width: 180px;
+
+    height: 1px;
+
+    margin-top: 22px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #999,
+            transparent
+        );
 
     opacity: .5;
 
@@ -111,7 +208,7 @@ body {
 
 
 /* =====================================================
-   LOGO CENTRAL
+   LOGO SECUNDARIO DEL SALVAPANTALLAS
 ===================================================== */
 
 .logo {
@@ -196,6 +293,20 @@ body {
 
     }
 
+    .logo-principal {
+
+        width: 82vw;
+
+    }
+
+    .subtitulo {
+
+        font-size: 10px;
+
+        letter-spacing: 5px;
+
+    }
+
 }
 
 </style>
@@ -214,9 +325,22 @@ body {
 
     <div class="contenido">
 
-        <h1>JOS3</h1>
+        <!-- LOGO PRINCIPAL -->
 
-        <p>PÁGINA PERSONAL</p>
+        <img
+            src="logo-principal.png"
+            alt="JOS3"
+            class="logo-principal"
+        >
+
+
+        <!-- ELEMENTOS PROVISIONALES -->
+
+        <div class="linea"></div>
+
+        <div class="subtitulo">
+            AUTOMOTIVE · PHOTOGRAPHY · LIFESTYLE
+        </div>
 
     </div>
 
@@ -225,6 +349,7 @@ body {
 
 <!-- =====================================================
      SALVAPANTALLAS
+     NO MODIFICAR
 ===================================================== -->
 
 <canvas
@@ -233,7 +358,8 @@ body {
 
 
 <!-- =====================================================
-     LOGO
+     LOGO SECUNDARIO J3
+     NO MODIFICAR
 ===================================================== -->
 
 <img
@@ -249,6 +375,7 @@ body {
 
 /* =====================================================
    CANVAS
+   SALVAPANTALLAS — NO MODIFICAR
 ===================================================== */
 
 const canvas =
@@ -321,10 +448,6 @@ window.addEventListener(
 let pinceladas = [];
 
 
-/*
-   Posición anterior del ratón
-*/
-
 let ultimoX = null;
 let ultimoY = null;
 
@@ -344,10 +467,6 @@ document.addEventListener(
             event.clientY;
 
 
-        /*
-           Primer movimiento
-        */
-
         if (
             ultimoX === null
         ) {
@@ -359,10 +478,6 @@ document.addEventListener(
 
         }
 
-
-        /*
-           Distancia recorrida
-        */
 
         const dx =
             x - ultimoX;
@@ -377,11 +492,6 @@ document.addEventListener(
             );
 
 
-        /*
-           Si apenas se ha movido,
-           no creamos una pincelada.
-        */
-
         if (
             distancia < 2
         ) {
@@ -390,11 +500,6 @@ document.addEventListener(
 
         }
 
-
-        /*
-           Cantidad de puntos
-           dependiendo de la distancia.
-        */
 
         const cantidad =
             Math.max(
@@ -405,20 +510,12 @@ document.addEventListener(
             );
 
 
-        /*
-           Dirección del pincel
-        */
-
         const angulo =
             Math.atan2(
                 dy,
                 dx
             );
 
-
-        /* =================================================
-           CREAR PINTURA
-        ================================================= */
 
         for (
             let i = 0;
@@ -430,10 +527,6 @@ document.addEventListener(
                 i / cantidad;
 
 
-            /*
-               Posición interpolada
-            */
-
             const px =
                 ultimoX +
                 dx * t;
@@ -443,20 +536,11 @@ document.addEventListener(
                 dy * t;
 
 
-            /*
-               Pequeña irregularidad
-               para evitar círculos perfectos.
-            */
-
             const desviacion =
                 (
                     Math.random() - .5
                 ) * 18;
 
-
-            /*
-               Tamaño de la pincelada
-            */
 
             const anchoPincel =
                 38 +
@@ -499,11 +583,6 @@ document.addEventListener(
                     ) *
                     .45,
 
-                /*
-                   Duración aproximada
-                   0.6 - 0.9 segundos
-                */
-
                 vida:
                     1,
 
@@ -529,12 +608,6 @@ document.addEventListener(
 
 function dibujar() {
 
-
-    /*
-       -------------------------------------------------
-       1. FONDO GRIS COMPLETAMENTE OPACO
-       -------------------------------------------------
-    */
 
     const fondo =
         ctx.createRadialGradient(
@@ -585,12 +658,6 @@ function dibujar() {
     );
 
 
-    /*
-       -------------------------------------------------
-       2. BORRAR LAS PINCELADAS
-       -------------------------------------------------
-    */
-
     for (
         let i =
             pinceladas.length - 1;
@@ -604,17 +671,9 @@ function dibujar() {
             pinceladas[i];
 
 
-        /*
-           La marca se desvanece.
-        */
-
         p.vida -=
             p.velocidad;
 
-
-        /*
-           Eliminar cuando desaparece.
-        */
 
         if (
             p.vida <= 0
@@ -630,20 +689,12 @@ function dibujar() {
         }
 
 
-        /*
-           Radio de la pincelada
-        */
-
         const radio =
             Math.max(
                 p.ancho,
                 p.alto
             );
 
-
-        /*
-           Degradado.
-        */
 
         const gradiente =
             ctx.createRadialGradient(
@@ -659,20 +710,11 @@ function dibujar() {
             );
 
 
-        /*
-           Centro completamente
-           transparente.
-        */
-
         gradiente.addColorStop(
             0,
             "rgba(0,0,0,1)"
         );
 
-
-        /*
-           Zona intermedia.
-        */
 
         gradiente.addColorStop(
             .35,
@@ -686,19 +728,11 @@ function dibujar() {
         );
 
 
-        /*
-           Borde suave.
-        */
-
         gradiente.addColorStop(
             1,
             "rgba(0,0,0,0)"
         );
 
-
-        /*
-           Borramos el gris.
-        */
 
         ctx.save();
 
@@ -753,10 +787,6 @@ function dibujar() {
     }
 
 
-    /*
-       Siguiente frame
-    */
-
     requestAnimationFrame(
         dibujar
     );
@@ -764,15 +794,11 @@ function dibujar() {
 }
 
 
-/* =====================================================
-   INICIAR
-===================================================== */
-
 dibujar();
 
 
 /* =====================================================
-   CLICK PARA ENTRAR
+   ENTRADA A LA WEB
 ===================================================== */
 
 const logo =
@@ -800,36 +826,19 @@ document.addEventListener(
         entrando = true;
 
 
-        /*
-           Paramos de aceptar
-           nuevas pinceladas.
-        */
-
         document.body.style.cursor =
             "default";
 
-
-        /*
-           Desaparece el salvapantallas.
-        */
 
         canvas.classList.add(
             "salir"
         );
 
 
-        /*
-           Desaparece el logo.
-        */
-
         logo.classList.add(
             "salir"
         );
 
-
-        /*
-           Después de la transición
-        */
 
         setTimeout(
             function() {
