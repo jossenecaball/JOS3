@@ -3,530 +3,442 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>JOS3</title>
+<title>JOS3</title>
 
 
-    <style>
+<style>
 
-        /* ==================================================
-           CONFIGURACIÓN GENERAL
-        ================================================== */
+/* =====================================================
+   CONFIGURACIÓN
+===================================================== */
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        html,
-        body {
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 
-            width: 100%;
-            height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
 
-            overflow: hidden;
+    background: #dcdcd9;
+}
 
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
 
-            background: #dededc;
-        }
+/* =====================================================
+   WEB REAL
+===================================================== */
 
+.pagina {
 
-        /* ==================================================
-           PÁGINA REAL DE JOS3
-        ================================================== */
+    position: fixed;
 
-        .pagina {
+    inset: 0;
 
-            position: fixed;
+    width: 100%;
+    height: 100%;
 
-            inset: 0;
+    overflow: hidden;
 
-            width: 100%;
-            height: 100%;
+    background:
 
-            background:
+        radial-gradient(
+            circle at 50% 40%,
+            #ffffff 0%,
+            #e3e3e1 45%,
+            #c4c4c1 100%
+        );
 
-                radial-gradient(
-                    circle at 50% 40%,
-                    #ffffff 0%,
-                    #e4e4e2 45%,
-                    #c7c7c4 100%
-                );
+    color: #111;
 
-            color: #111;
+    transform: scale(1.02);
 
-            overflow: hidden;
-        }
+    transition:
+        transform 1.5s
+        cubic-bezier(.16,1,.3,1);
+}
 
 
-        /* Brillo ambiental */
+/* Brillos de fondo */
 
-        .pagina::before {
+.pagina::before {
 
-            content: "";
+    content: "";
 
-            position: absolute;
+    position: absolute;
 
-            inset: -20%;
+    inset: -20%;
 
-            background:
+    background:
 
-                radial-gradient(
-                    circle at 20% 20%,
-                    rgba(255,255,255,.9),
-                    transparent 35%
-                ),
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(255,255,255,.9),
+            transparent 30%
+        ),
 
-                radial-gradient(
-                    circle at 80% 80%,
-                    rgba(255,255,255,.55),
-                    transparent 35%
-                );
+        radial-gradient(
+            circle at 80% 80%,
+            rgba(255,255,255,.5),
+            transparent 35%
+        );
 
-            pointer-events: none;
-        }
+    pointer-events: none;
+}
 
 
-        /* ==================================================
-           CONTENIDO DE LA FUTURA WEB
-        ================================================== */
+/* =====================================================
+   CONTENIDO DE LA WEB
+===================================================== */
 
-        .contenido-web {
+.contenido-web {
 
-            position: relative;
+    position: relative;
 
-            width: 100%;
-            height: 100%;
+    width: 100%;
+    height: 100%;
 
-            display: flex;
+    display: flex;
 
-            align-items: center;
-            justify-content: center;
+    align-items: center;
+    justify-content: center;
 
-            flex-direction: column;
+    flex-direction: column;
 
-            text-align: center;
+    text-align: center;
 
-            z-index: 2;
-        }
+    z-index: 2;
+}
 
 
-        .titulo-web {
+.titulo-web {
 
-            font-size:
-                clamp(100px, 17vw, 260px);
+    font-size:
+        clamp(100px, 17vw, 260px);
 
-            font-weight: 900;
+    font-weight: 900;
 
-            letter-spacing: -15px;
+    letter-spacing: -15px;
 
-            color: #111;
+    color: #111;
 
-            line-height: .8;
-        }
+    line-height: .8;
+}
 
 
-        .subtitulo-web {
+.subtitulo-web {
 
-            margin-top: 35px;
+    margin-top: 35px;
 
-            font-size: 13px;
+    font-size: 13px;
 
-            letter-spacing: 9px;
+    letter-spacing: 9px;
 
-            color: #555;
+    color: #555;
 
-            text-transform: uppercase;
-        }
+    text-transform: uppercase;
+}
 
 
-        /* ==================================================
-           PANTALLA DE ENTRADA
-        ================================================== */
+/* =====================================================
+   PANTALLA DE ENTRADA
+===================================================== */
 
-        .entrada {
+.entrada {
 
-            position: fixed;
+    position: fixed;
 
-            inset: 0;
+    inset: 0;
 
-            z-index: 10;
+    z-index: 10;
 
-            background:
+    /*
+       La parte gris está encima de la web.
+       La zona alrededor del ratón será transparente.
+    */
 
-                rgba(226,226,223,.96);
+    background:
 
-            backdrop-filter:
-                blur(20px);
+        radial-gradient(
+            circle 170px at var(--mouse-x) var(--mouse-y),
 
-            -webkit-backdrop-filter:
-                blur(20px);
+            rgba(255,255,255,0) 0%,
 
-            display: flex;
+            rgba(255,255,255,0) 65%,
 
-            align-items: center;
-            justify-content: center;
+            rgba(225,225,222,.30) 76%,
 
-            cursor: none;
+            rgba(225,225,222,.88) 100%
+        );
 
-            transition:
-                opacity 1.4s ease,
-                visibility 1.4s ease;
-        }
+    backdrop-filter:
+        blur(16px);
 
+    -webkit-backdrop-filter:
+        blur(16px);
 
-        /* ==================================================
-           LOGO CENTRAL
-        ================================================== */
+    cursor: none;
 
-        .logo-central {
+    transition:
+        opacity 1.2s ease,
+        visibility 1.2s ease;
+}
 
-            position: absolute;
 
-            left: 50%;
-            top: 50%;
+/* =====================================================
+   CAPA GRIS GENERAL
+===================================================== */
 
-            transform:
-                translate(-50%, -50%);
+.entrada::before {
 
-            width:
-                min(520px, 55vw);
+    content: "";
 
-            z-index: 30;
+    position: absolute;
 
-            pointer-events: none;
+    inset: 0;
 
-            user-select: none;
+    background:
 
-            transition:
+        radial-gradient(
+            circle 170px at var(--mouse-x) var(--mouse-y),
 
-                transform 1.2s
-                cubic-bezier(.16,1,.3,1),
+            rgba(230,230,227,0) 0%,
 
-                opacity 1s ease;
-        }
+            rgba(230,230,227,.08) 55%,
 
+            rgba(230,230,227,.72) 100%
+        );
 
-        .logo-central img {
+    pointer-events: none;
+}
 
-            display: block;
 
-            width: 100%;
-            height: auto;
+/* =====================================================
+   LOGO CENTRAL
+===================================================== */
 
-            filter:
+.logo-central {
 
-                drop-shadow(
-                    0 25px 35px
-                    rgba(0,0,0,.20)
-                );
-        }
+    position: fixed;
 
+    left: 50%;
+    top: 50%;
 
-        /* ==================================================
-           LENTE DEL RATÓN
-        ================================================== */
+    transform:
+        translate(-50%, -50%);
 
-        .lente {
+    width:
+        min(520px, 55vw);
 
-            position: fixed;
+    z-index: 30;
 
-            left: 50%;
-            top: 50%;
+    pointer-events: none;
 
-            width: 320px;
-            height: 320px;
+    user-select: none;
 
-            transform:
-                translate(-50%, -50%);
+    transition:
 
-            border-radius: 50%;
+        transform 1.2s
+        cubic-bezier(.16,1,.3,1),
 
-            overflow: hidden;
+        opacity 1s ease;
+}
 
-            z-index: 20;
 
-            pointer-events: none;
+.logo-central img {
 
-            opacity: 0;
+    width: 100%;
 
-            background:
-                rgba(255,255,255,.08);
+    height: auto;
 
-            border:
+    display: block;
 
-                1px solid
-                rgba(255,255,255,.9);
+    filter:
 
-            box-shadow:
+        drop-shadow(
+            0 25px 35px
+            rgba(0,0,0,.20)
+        );
+}
 
-                0 0 35px
-                rgba(255,255,255,.55),
 
-                0 20px 70px
-                rgba(0,0,0,.16),
+/* =====================================================
+   BORDE DE LA LENTE
+===================================================== */
 
-                inset 0 0 35px
-                rgba(255,255,255,.35);
+.lente {
 
-            transition:
-                opacity .4s ease;
-        }
+    position: fixed;
 
+    left: 0;
+    top: 0;
 
-        /* ==================================================
-           WEB REVELADA DENTRO DE LA LENTE
-        ================================================== */
+    width: 340px;
+    height: 340px;
 
-        .web-revelada {
+    transform:
+        translate(-50%, -50%);
 
-            position: absolute;
+    border-radius: 50%;
 
-            width: 100vw;
-            height: 100vh;
+    pointer-events: none;
 
-            left: 50%;
-            top: 50%;
+    z-index: 25;
 
-            transform:
-                translate(-50%, -50%)
-                scale(1.10);
+    opacity: 0;
 
-            background:
+    border:
 
-                radial-gradient(
-                    circle at 50% 40%,
-                    #ffffff 0%,
-                    #e0e0de 45%,
-                    #c3c3c0 100%
-                );
+        1px solid
+        rgba(255,255,255,.85);
 
-            display: flex;
+    box-shadow:
 
-            align-items: center;
-            justify-content: center;
+        0 0 25px
+        rgba(255,255,255,.5),
 
-            flex-direction: column;
+        0 15px 50px
+        rgba(0,0,0,.12),
 
-            text-align: center;
-        }
+        inset 0 0 30px
+        rgba(255,255,255,.25);
 
+    transition:
+        opacity .4s ease;
+}
 
-        .web-revelada::before {
 
-            content: "";
+/* Reflejo de cristal */
 
-            position: absolute;
+.lente::before {
 
-            inset: -20%;
+    content: "";
 
-            background:
+    position: absolute;
 
-                radial-gradient(
-                    circle at 30% 30%,
-                    rgba(255,255,255,.95),
-                    transparent 35%
-                ),
+    width: 55%;
+    height: 55%;
 
-                radial-gradient(
-                    circle at 70% 70%,
-                    rgba(255,255,255,.55),
-                    transparent 35%
-                );
-        }
+    top: -10%;
+    left: -10%;
 
+    border-radius: 50%;
 
-        .texto-revelado {
+    background:
 
-            position: relative;
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.65),
+            transparent 65%
+        );
 
-            font-size:
-                clamp(100px, 17vw, 260px);
+    filter: blur(10px);
+}
 
-            font-weight: 900;
 
-            letter-spacing: -15px;
+/* =====================================================
+   AL HACER CLICK
+===================================================== */
 
-            color: #111;
+.entrada.expandir {
 
-            line-height: .8;
-        }
+    animation:
 
+        expandirEntrada
+        1.5s
+        cubic-bezier(.16,1,.3,1)
+        forwards;
+}
 
-        .texto-revelado-pequeno {
 
-            position: relative;
+@keyframes expandirEntrada {
 
-            margin-top: 35px;
+    0% {
 
-            font-size: 13px;
+        clip-path:
 
-            letter-spacing: 9px;
+            circle(
+                170px
+                at var(--mouse-x)
+                var(--mouse-y)
+            );
 
-            color: #555;
+        opacity: 1;
+    }
 
-            text-transform: uppercase;
-        }
+    100% {
 
+        clip-path:
 
-        /* ==================================================
-           REFLEJO DE LA LENTE
-        ================================================== */
+            circle(
+                150vmax
+                at var(--mouse-x)
+                var(--mouse-y)
+            );
 
-        .lente::before {
+        opacity: 0;
+    }
+}
 
-            content: "";
 
-            position: absolute;
+/* =====================================================
+   LOGO AL ENTRAR
+===================================================== */
 
-            width: 55%;
-            height: 55%;
+.entrada.expandir
+.logo-central {
 
-            top: -15%;
-            left: -10%;
+    transform:
 
-            border-radius: 50%;
+        translate(-50%, -50%)
+        scale(.65);
 
-            background:
+    opacity: 0;
+}
 
-                radial-gradient(
-                    circle,
-                    rgba(255,255,255,.7),
-                    transparent 65%
-                );
 
-            filter: blur(12px);
+/* =====================================================
+   MÓVIL
+===================================================== */
 
-            z-index: 5;
+@media (max-width: 700px) {
 
-            pointer-events: none;
-        }
+    .logo-central {
 
+        width: 75vw;
+    }
 
-        .lente::after {
+    .lente {
 
-            content: "";
+        width: 230px;
+        height: 230px;
+    }
 
-            position: absolute;
+    .titulo-web {
 
-            inset: 0;
+        font-size: 25vw;
 
-            border-radius: 50%;
+        letter-spacing: -5px;
+    }
 
-            background:
+    .subtitulo-web {
 
-                linear-gradient(
-                    130deg,
-                    rgba(255,255,255,.30),
-                    transparent 35%,
-                    transparent 65%,
-                    rgba(255,255,255,.12)
-                );
+        font-size: 9px;
 
-            pointer-events: none;
-        }
+        letter-spacing: 5px;
+    }
+}
 
-
-        /* ==================================================
-           ESTADO FINAL — ENTRAR EN LA WEB
-        ================================================== */
-
-        .entrada.salir {
-
-            opacity: 0;
-
-            visibility: hidden;
-
-            pointer-events: none;
-        }
-
-
-        .entrada.salir .logo-central {
-
-            transform:
-                translate(-50%, -50%)
-                scale(.75);
-
-            opacity: 0;
-        }
-
-
-        /* ==================================================
-           ANIMACIÓN DE EXPANSIÓN
-        ================================================== */
-
-        .entrada.expandir .lente {
-
-            animation:
-                expandirLente 1.4s
-                cubic-bezier(.16,1,.3,1)
-                forwards;
-        }
-
-
-        @keyframes expandirLente {
-
-            0% {
-
-                width: 320px;
-                height: 320px;
-
-                opacity: 1;
-            }
-
-            100% {
-
-                width: 220vmax;
-                height: 220vmax;
-
-                opacity: 1;
-            }
-        }
-
-
-        /* ==================================================
-           MÓVILES
-        ================================================== */
-
-        @media (max-width: 700px) {
-
-            .logo-central {
-
-                width: 75vw;
-            }
-
-            .lente {
-
-                width: 220px;
-                height: 220px;
-            }
-
-            .titulo-web {
-
-                font-size: 25vw;
-
-                letter-spacing: -5px;
-            }
-
-            .subtitulo-web {
-
-                font-size: 9px;
-
-                letter-spacing: 5px;
-            }
-
-        }
-
-    </style>
+</style>
 
 </head>
 
@@ -534,202 +446,195 @@
 <body>
 
 
-    <!-- ==================================================
-         PÁGINA PRINCIPAL
-    ================================================== -->
+<!-- =====================================================
+     WEB REAL
+===================================================== -->
 
-    <main class="pagina">
+<main class="pagina">
 
-        <div class="contenido-web">
+    <div class="contenido-web">
 
-            <div class="titulo-web">
-                JOS3
-            </div>
-
-            <div class="subtitulo-web">
-                Página personal
-            </div>
-
+        <div class="titulo-web">
+            JOS3
         </div>
 
-    </main>
+        <div class="subtitulo-web">
+            Página personal
+        </div>
+
+    </div>
+
+</main>
 
 
-    <!-- ==================================================
-         PANTALLA DE ENTRADA
-    ================================================== -->
+<!-- =====================================================
+     PANTALLA DE ENTRADA
+===================================================== -->
 
-    <section
-        class="entrada"
-        id="entrada"
-    >
+<section
+    class="entrada"
+    id="entrada"
+>
 
 
-        <!-- LENTE -->
+    <!-- LENTE -->
 
-        <div
-            class="lente"
-            id="lente"
+    <div
+        class="lente"
+        id="lente"
+    ></div>
+
+
+    <!-- LOGO -->
+
+    <div class="logo-central">
+
+        <img
+            src="logo-secundario.png"
+            alt="JOS3"
         >
 
-            <div class="web-revelada">
-
-                <div class="texto-revelado">
-                    JOS3
-                </div>
-
-                <div class="texto-revelado-pequeno">
-                    Página personal
-                </div>
-
-            </div>
-
-        </div>
+    </div>
 
 
-        <!-- LOGO CENTRAL -->
-
-        <div class="logo-central">
-
-            <img
-                src="logo-secundario.png"
-                alt="JOS3"
-            >
-
-        </div>
+</section>
 
 
-    </section>
+<script>
+
+/* =====================================================
+   ELEMENTOS
+===================================================== */
+
+const entrada =
+    document.getElementById("entrada");
+
+const lente =
+    document.getElementById("lente");
 
 
-    <script>
+/* =====================================================
+   POSICIÓN DEL RATÓN
+===================================================== */
+
+let mouseX =
+    window.innerWidth / 2;
+
+let mouseY =
+    window.innerHeight / 2;
 
 
-        /* ==================================================
-           ELEMENTOS
-        ================================================== */
+let actualX =
+    mouseX;
 
-        const entrada =
-            document.getElementById("entrada");
-
-        const lente =
-            document.getElementById("lente");
+let actualY =
+    mouseY;
 
 
-        /* ==================================================
-           POSICIÓN DEL RATÓN
-        ================================================== */
+/* =====================================================
+   MOVIMIENTO DEL RATÓN
+===================================================== */
 
-        let ratonX =
-            window.innerWidth / 2;
+document.addEventListener(
+    "mousemove",
+    function(evento) {
 
-        let ratonY =
-            window.innerHeight / 2;
+        mouseX =
+            evento.clientX;
+
+        mouseY =
+            evento.clientY;
+
+        lente.style.opacity = "1";
+
+    }
+);
 
 
-        let actualX = ratonX;
-        let actualY = ratonY;
+/* =====================================================
+   MOVIMIENTO SUAVE
+===================================================== */
+
+function animar() {
+
+    actualX +=
+        (mouseX - actualX) * 0.12;
+
+    actualY +=
+        (mouseY - actualY) * 0.12;
 
 
-        /* ==================================================
-           MOVIMIENTO
-        ================================================== */
+    /*
+       Movemos la lente
+    */
 
-        document.addEventListener(
-            "mousemove",
-            function(evento) {
+    lente.style.left =
+        actualX + "px";
 
-                ratonX =
-                    evento.clientX;
+    lente.style.top =
+        actualY + "px";
 
-                ratonY =
-                    evento.clientY;
 
-                lente.style.opacity = "1";
+    /*
+       Estas variables controlan
+       el agujero de la pantalla gris.
+    */
 
-            }
+    entrada.style.setProperty(
+        "--mouse-x",
+        actualX + "px"
+    );
+
+    entrada.style.setProperty(
+        "--mouse-y",
+        actualY + "px"
+    );
+
+
+    requestAnimationFrame(animar);
+}
+
+
+animar();
+
+
+/* =====================================================
+   ENTRAR EN LA WEB
+===================================================== */
+
+entrada.addEventListener(
+    "click",
+    function() {
+
+        entrada.classList.add(
+            "expandir"
         );
 
-
-        /* ==================================================
-           MOVIMIENTO SUAVE
-        ================================================== */
-
-        function animar() {
-
-            actualX +=
-                (ratonX - actualX)
-                * 0.10;
-
-            actualY +=
-                (ratonY - actualY)
-                * 0.10;
+    }
+);
 
 
-            lente.style.left =
-                actualX + "px";
+/* =====================================================
+   TECLADO
+===================================================== */
 
-            lente.style.top =
-                actualY + "px";
+document.addEventListener(
+    "keydown",
+    function(evento) {
 
+        if (
+            evento.key === "Enter" ||
+            evento.key === " "
+        ) {
 
-            requestAnimationFrame(animar);
+            entrada.click();
+
         }
 
+    }
+);
 
-        animar();
-
-
-        /* ==================================================
-           CLICK
-        ================================================== */
-
-        entrada.addEventListener(
-            "click",
-            function() {
-
-                entrada.classList.add(
-                    "expandir"
-                );
-
-
-                setTimeout(
-                    function() {
-
-                        entrada.classList.add(
-                            "salir"
-                        );
-
-                    },
-                    650
-                );
-
-            }
-        );
-
-
-        /* ==================================================
-           TECLADO
-        ================================================== */
-
-        document.addEventListener(
-            "keydown",
-            function(evento) {
-
-                if (
-                    evento.key === "Enter" ||
-                    evento.key === " "
-                ) {
-
-                    entrada.click();
-
-                }
-
-            }
-        );
-
-
-    </script>
+</script>
 
 
 </body>
