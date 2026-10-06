@@ -3,35 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>JOS3</title>
 
 <style>
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    font-family: Arial, Helvetica, sans-serif;
+    background: #bdbdbd;
 }
 
-/* =========================
-   PÁGINA REAL
-========================= */
+
+/* =====================================================
+   WEB REAL QUE ESTÁ DEBAJO
+===================================================== */
 
 .pagina {
     position: fixed;
     inset: 0;
+
     background:
-        radial-gradient(circle at 50% 40%, #eeeeee 0%, #cfcfcf 45%, #a9a9a9 100%);
+        radial-gradient(
+            circle at 50% 45%,
+            #f2f2f2 0%,
+            #d2d2d2 45%,
+            #a8a8a8 100%
+        );
+
     display: flex;
-    justify-content: center;
     align-items: center;
-    color: #111;
+    justify-content: center;
+
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .contenido {
@@ -39,222 +51,155 @@ html, body {
 }
 
 .contenido h1 {
-    font-size: clamp(90px, 18vw, 260px);
+    font-size: clamp(100px, 18vw, 260px);
     font-weight: 900;
-    letter-spacing: -15px;
+    letter-spacing: -12px;
+    color: #111;
 }
 
 .contenido p {
-    margin-top: 15px;
+    margin-top: 10px;
     font-size: 18px;
     letter-spacing: 6px;
-    text-transform: uppercase;
-    opacity: 0.55;
+    color: #222;
+    opacity: .5;
 }
 
 
-/* =========================
-   CAPA DE ENTRADA
-========================= */
+/* =====================================================
+   PANTALLA DE ENTRADA
+===================================================== */
 
 .entrada {
     position: fixed;
     inset: 0;
+
     z-index: 10;
 
     background:
         radial-gradient(
             circle at center,
-            rgba(245,245,245,0.97),
-            rgba(215,215,215,0.98)
+            #f4f4f4 0%,
+            #dddddd 55%,
+            #c8c8c8 100%
         );
-
-    overflow: hidden;
-
-    /* Máscara que crea la "nube" */
-    -webkit-mask-image:
-        radial-gradient(
-            ellipse 55px 42px at var(--mouse-x) var(--mouse-y),
-            transparent 0%,
-            transparent 30%,
-            rgba(0,0,0,0.35) 48%,
-            rgba(0,0,0,0.85) 72%,
-            black 100%
-        );
-
-    mask-image:
-        radial-gradient(
-            ellipse 55px 42px at var(--mouse-x) var(--mouse-y),
-            transparent 0%,
-            transparent 30%,
-            rgba(0,0,0,0.35) 48%,
-            rgba(0,0,0,0.85) 72%,
-            black 100%
-        );
-
-    transition: opacity 0.4s ease;
 }
 
 
-/* =========================
-   ESTELA
-========================= */
+/* =====================================================
+   CANVAS DE LA NIEBLA
+===================================================== */
 
-.estela {
+#niebla {
     position: fixed;
     inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 15;
+
     pointer-events: none;
-    z-index: 11;
-
-    opacity: 0.9;
-
-    background:
-        radial-gradient(
-            ellipse 85px 55px at var(--trail-x1) var(--trail-y1),
-            rgba(255,255,255,0.18),
-            transparent 70%
-        ),
-
-        radial-gradient(
-            ellipse 130px 65px at var(--trail-x2) var(--trail-y2),
-            rgba(255,255,255,0.12),
-            transparent 75%
-        ),
-
-        radial-gradient(
-            ellipse 180px 75px at var(--trail-x3) var(--trail-y3),
-            rgba(255,255,255,0.08),
-            transparent 80%
-        );
-
-    filter: blur(12px);
 }
 
 
-/* =========================
+/* =====================================================
    LOGO
-========================= */
+===================================================== */
 
 .logo {
     position: fixed;
-    z-index: 20;
+
+    z-index: 30;
 
     left: 50%;
     top: 50%;
 
     transform: translate(-50%, -50%);
 
-    width: min(270px, 42vw);
+    width: min(300px, 45vw);
 
     pointer-events: none;
 
     filter:
-        drop-shadow(0 10px 20px rgba(0,0,0,0.18));
-}
-
-
-/* =========================
-   CLICK / TRANSICIÓN
-========================= */
-
-.entrada.expandir {
-    -webkit-mask-image:
-        radial-gradient(
-            circle 150vmax at var(--mouse-x) var(--mouse-y),
-            transparent 0%,
-            transparent 100%
-        );
-
-    mask-image:
-        radial-gradient(
-            circle 150vmax at var(--mouse-x) var(--mouse-y),
-            transparent 0%,
-            transparent 100%
+        drop-shadow(
+            0 12px 25px rgba(0,0,0,.20)
         );
 
     transition:
-        -webkit-mask-image 1.2s ease,
-        mask-image 1.2s ease;
+        opacity .6s ease,
+        transform .8s ease;
 }
 
-.logo.desaparecer {
+
+/* =====================================================
+   TRANSICIÓN FINAL
+===================================================== */
+
+.entrada.final {
     opacity: 0;
+
+    transition:
+        opacity 1.2s ease;
+}
+
+.logo.final {
+    opacity: 0;
+
     transform:
         translate(-50%, -50%)
         scale(1.25);
+}
+
+#niebla.final {
+    opacity: 0;
 
     transition:
-        opacity 0.5s ease,
-        transform 0.8s ease;
+        opacity .8s ease;
 }
 
-.estela.ocultar {
-    opacity: 0;
-    transition: opacity 0.5s ease;
-}
-
-
-/* =========================
-   MÓVIL
-========================= */
-
-@media (max-width: 700px) {
-
-    .logo {
-        width: 55vw;
-    }
-
-    .entrada {
-        -webkit-mask-image:
-            radial-gradient(
-                ellipse 45px 35px at var(--mouse-x) var(--mouse-y),
-                transparent 0%,
-                transparent 30%,
-                rgba(0,0,0,0.4) 50%,
-                black 100%
-            );
-
-        mask-image:
-            radial-gradient(
-                ellipse 45px 35px at var(--mouse-x) var(--mouse-y),
-                transparent 0%,
-                transparent 30%,
-                rgba(0,0,0,0.4) 50%,
-                black 100%
-            );
-    }
-}
 </style>
 </head>
 
 
 <body>
 
-<!-- =========================
+
+<!-- =====================================================
      PÁGINA REAL
-========================= -->
+===================================================== -->
 
 <div class="pagina">
 
     <div class="contenido">
+
         <h1>JOS3</h1>
-        <p>Página personal</p>
+
+        <p>PÁGINA PERSONAL</p>
+
     </div>
 
 </div>
 
 
-<!-- =========================
-     CAPA DE NIEBLA
-========================= -->
+<!-- =====================================================
+     CAPA DE ENTRADA
+===================================================== -->
 
 <div class="entrada" id="entrada"></div>
 
-<!-- Estela -->
-<div class="estela" id="estela"></div>
+
+<!-- =====================================================
+     NIEBLA
+===================================================== -->
+
+<canvas id="niebla"></canvas>
 
 
-<!-- LOGO -->
+<!-- =====================================================
+     LOGO
+===================================================== -->
+
 <img
     src="logo-secundario.png"
     alt="JOS3"
@@ -265,144 +210,352 @@ html, body {
 
 <script>
 
+
+/* =====================================================
+   CONFIGURACIÓN
+===================================================== */
+
+const canvas = document.getElementById("niebla");
+
+const ctx = canvas.getContext("2d");
+
 const entrada = document.getElementById("entrada");
-const estela = document.getElementById("estela");
+
 const logo = document.getElementById("logo");
 
-let mouseX = window.innerWidth / 2;
-let mouseY = window.innerHeight / 2;
 
-let trail = [
-    { x: mouseX, y: mouseY },
-    { x: mouseX, y: mouseY },
-    { x: mouseX, y: mouseY }
-];
-
-let activo = true;
+let ancho;
+let alto;
 
 
-/* =========================
-   MOVIMIENTO DEL RATÓN
-========================= */
+function ajustarCanvas() {
 
-document.addEventListener("mousemove", (e) => {
+    ancho = window.innerWidth;
+    alto = window.innerHeight;
 
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+    canvas.width = ancho * devicePixelRatio;
+    canvas.height = alto * devicePixelRatio;
 
-});
+    canvas.style.width = ancho + "px";
+    canvas.style.height = alto + "px";
 
-
-/* =========================
-   ANIMACIÓN SUAVE
-========================= */
-
-function animar() {
-
-    if (!activo) return;
-
-    /*
-       El punto principal sigue al ratón
-       rápidamente.
-    */
-
-    trail[0].x += (mouseX - trail[0].x) * 0.22;
-    trail[0].y += (mouseY - trail[0].y) * 0.22;
-
-
-    /*
-       Estos puntos siguen al anterior
-       más lentamente, creando la estela.
-    */
-
-    trail[1].x += (trail[0].x - trail[1].x) * 0.12;
-    trail[1].y += (trail[0].y - trail[1].y) * 0.12;
-
-    trail[2].x += (trail[1].x - trail[2].x) * 0.08;
-    trail[2].y += (trail[1].y - trail[2].y) * 0.08;
-
-
-    /*
-       Posición de la zona transparente.
-    */
-
-    entrada.style.setProperty(
-        "--mouse-x",
-        trail[0].x + "px"
+    ctx.setTransform(
+        devicePixelRatio,
+        0,
+        0,
+        devicePixelRatio,
+        0,
+        0
     );
-
-    entrada.style.setProperty(
-        "--mouse-y",
-        trail[0].y + "px"
-    );
-
-
-    /*
-       Posiciones de la nube/estela.
-    */
-
-    estela.style.setProperty(
-        "--trail-x1",
-        trail[0].x + "px"
-    );
-
-    estela.style.setProperty(
-        "--trail-y1",
-        trail[0].y + "px"
-    );
-
-    estela.style.setProperty(
-        "--trail-x2",
-        trail[1].x + "px"
-    );
-
-    estela.style.setProperty(
-        "--trail-y2",
-        trail[1].y + "px"
-    );
-
-    estela.style.setProperty(
-        "--trail-x3",
-        trail[2].x + "px"
-    );
-
-    estela.style.setProperty(
-        "--trail-y3",
-        trail[2].y + "px"
-    );
-
-
-    requestAnimationFrame(animar);
 }
 
-animar();
+
+ajustarCanvas();
+
+window.addEventListener(
+    "resize",
+    ajustarCanvas
+);
 
 
-/* =========================
+/* =====================================================
+   RATÓN
+===================================================== */
+
+let raton = {
+
+    x: ancho / 2,
+
+    y: alto / 2
+
+};
+
+
+let posicion = {
+
+    x: ancho / 2,
+
+    y: alto / 2
+
+};
+
+
+/* =====================================================
+   ESTELA
+===================================================== */
+
+const puntos = [];
+
+const cantidadPuntos = 18;
+
+
+for (
+    let i = 0;
+    i < cantidadPuntos;
+    i++
+) {
+
+    puntos.push({
+
+        x: raton.x,
+
+        y: raton.y,
+
+        vida: 0
+
+    });
+
+}
+
+
+/* =====================================================
+   MOVIMIENTO
+===================================================== */
+
+document.addEventListener(
+    "mousemove",
+    function(event) {
+
+        raton.x = event.clientX;
+
+        raton.y = event.clientY;
+
+    }
+);
+
+
+/* =====================================================
+   DIBUJAR NIEBLA
+===================================================== */
+
+function dibujar() {
+
+
+    /*
+       Limpiamos el canvas
+    */
+
+    ctx.clearRect(
+        0,
+        0,
+        ancho,
+        alto
+    );
+
+
+    /*
+       Actualizamos posición
+    */
+
+    posicion.x +=
+        (raton.x - posicion.x) * 0.22;
+
+    posicion.y +=
+        (raton.y - posicion.y) * 0.22;
+
+
+    /*
+       Añadimos nuevo punto
+    */
+
+    puntos.unshift({
+
+        x: posicion.x,
+
+        y: posicion.y,
+
+        vida: 1
+
+    });
+
+
+    /*
+       Limitamos la cantidad
+    */
+
+    if (
+        puntos.length >
+        cantidadPuntos
+    ) {
+
+        puntos.pop();
+
+    }
+
+
+    /* =================================================
+       ESTELA DE NIEBLA
+    ================================================= */
+
+    puntos.forEach(
+        function(punto, indice) {
+
+            const escala =
+                1 -
+                indice /
+                cantidadPuntos;
+
+
+            const radioX =
+                48 +
+                escala * 25;
+
+
+            const radioY =
+                32 +
+                escala * 18;
+
+
+            /*
+               Nube principal
+            */
+
+            const gradiente =
+                ctx.createRadialGradient(
+
+                    punto.x,
+                    punto.y,
+
+                    0,
+
+                    punto.x,
+                    punto.y,
+
+                    radioX
+
+                );
+
+
+            /*
+               Transparencia de la nube
+            */
+
+            const alpha =
+                0.92 *
+                escala *
+                escala;
+
+
+            gradiente.addColorStop(
+                0,
+                `rgba(255,255,255,${alpha})`
+            );
+
+
+            gradiente.addColorStop(
+                .35,
+                `rgba(255,255,255,${alpha * .65})`
+            );
+
+
+            gradiente.addColorStop(
+                1,
+                "rgba(255,255,255,0)"
+            );
+
+
+            ctx.save();
+
+
+            /*
+               Forma ovalada
+            */
+
+            ctx.translate(
+                punto.x,
+                punto.y
+            );
+
+
+            ctx.scale(
+                1,
+                radioY / radioX
+            );
+
+
+            ctx.fillStyle =
+                gradiente;
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+                0,
+                0,
+                radioX,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+
+            ctx.restore();
+
+        }
+    );
+
+
+    /*
+       Siguiente frame
+    */
+
+    requestAnimationFrame(
+        dibujar
+    );
+
+}
+
+
+dibujar();
+
+
+/* =====================================================
    CLICK
-========================= */
+===================================================== */
 
-document.addEventListener("click", () => {
+document.addEventListener(
+    "click",
+    function() {
 
-    if (!activo) return;
 
-    activo = false;
+        entrada.classList.add(
+            "final"
+        );
 
-    entrada.classList.add("expandir");
-    logo.classList.add("desaparecer");
-    estela.classList.add("ocultar");
 
-    setTimeout(() => {
+        logo.classList.add(
+            "final"
+        );
 
-        entrada.style.display = "none";
-        estela.style.display = "none";
-        logo.style.display = "none";
 
-        document.body.style.overflow = "auto";
+        canvas.classList.add(
+            "final"
+        );
 
-    }, 1300);
 
-});
+        setTimeout(
+            function() {
+
+                entrada.style.display =
+                    "none";
+
+                canvas.style.display =
+                    "none";
+
+                logo.style.display =
+                    "none";
+
+                document.body.style.overflow =
+                    "auto";
+
+            },
+            1300
+        );
+
+    }
+);
+
 
 </script>
 
