@@ -1,1 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>JOS3</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #e9e9e7;
+        }
+
+        /* =========================================
+           PÁGINA PRINCIPAL
+        ========================================== */
+
+        .main-page {
+
+            position: fixed;
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at 50% 45%,
+                    rgba(255,255,255,0.95),
+                    rgba(205,205,202,1)
+                );
+
+            color: #111;
+
+            transform: scale(1.04);
+
+            transition: transform 1.5s cubic-bezier(.16,1,.3,1);
+
+            overflow: hidden;
+        }
+
+        .main-page::before {
+
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    120deg,
+                    transparent 20%,
+                    rgba(255,255,255,.55),
+                    transparent 80%
+                );
+
+            opacity: .4;
+
+            pointer-events: none;
+        }
+
+
+        /* =========================================
+           CONTENIDO DE PRUEBA
+        ========================================== */
+
+        .contenido {
+
+            position: relative;
+
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+        }
+
+        .contenido h1 {
+
+            font-size: clamp(80px, 14vw, 220px);
+
+            font-weight: 900;
+
+            letter-spacing: -12px;
+
+            color: #151515;
+
+            text-transform: uppercase;
+        }
+
+        .contenido p {
+
+            margin-top: 15px;
+
+            font-size: 14px;
+
+            letter-spacing: 7px;
+
+            color: #555;
+
+            text-transform: uppercase;
+        }
+
+
+        /* =========================================
+           PANTALLA DE ENTRADA
+        ========================================== */
+
+        .intro {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 10;
+
+            background: rgba(228,228,225,.94);
+
+            backdrop-filter: blur(18px);
+
+            -webkit-backdrop-filter: blur(18px);
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            cursor: none;
+
+            transition:
+                opacity 1.2s ease,
+                visibility 1.2s ease;
+        }
+
+
+        /* =========================================
+           LOGO SECUNDARIO
+        ========================================== */
+
+        .logo {
+
+            position: relative;
+
+            width: min(300px, 35vw);
+
+            z-index: 20;
+
+            user-select: none;
+
+            pointer-events: none;
+
+            transition:
+                transform .8s cubic-bezier(.16,1,.3,1),
+                opacity .8s ease;
+        }
+
+        .logo img {
+
+            width: 100%;
+
+            display: block;
+
+            filter:
+                drop-shadow(0 20px 30px rgba(0,0,0,.18));
+        }
+
+
+        /* =========================================
+           LENTE DEL CURSOR
+        ========================================== */
+
+        .lente {
+
+            position: fixed;
+
+            width: 260px;
+            height: 260px;
+
+            left: 0;
+            top: 0;
+
+            transform: translate(-50%, -50%);
+
+            border-radius: 50%;
+
+            pointer-events: none;
+
+            z-index: 15;
+
+            overflow: hidden;
+
+            opacity: 0;
+
+            background: rgba(255,255,255,.04);
+
+            border: 1px solid rgba(255,255,255,.8);
+
+            box-shadow:
+
+                0 0 40px rgba(255,255,255,.35),
+
+                inset 0 0 30px rgba(255,255,255,.35),
+
+                0 10px 50px rgba(0,0,0,.12);
+
+            transition: opacity .4s ease;
+        }
+
+
+        /* Contenido que aparece dentro de la lente */
+
+        .contenido-lente {
+
+            position: absolute;
+
+            width: 100vw;
+            height: 100vh;
+
+            left: 50%;
+            top: 50%;
+
+            transform:
+                translate(-50%, -50%)
+                scale(1.08);
+
+            background:
+                radial-gradient(
+                    circle at 50% 45%,
+                    rgba(255,255,255,.95),
+                    rgba(190,190,188,1)
+                );
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+        }
+
+        .contenido-lente::after {
+
+            content: "JOS3";
+
+            font-size: clamp(80px, 14vw, 220px);
+
+            font-weight: 900;
+
+            letter-spacing: -12px;
+
+            color: #111;
+        }
+
+
+        /* =========================================
+           TEXTO INFERIOR
+        ========================================== */
+
+        .indicacion {
+
+            position: absolute;
+
+            bottom: 45px;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            font-size: 11px;
+
+            letter-spacing: 5px;
+
+            color: rgba(30,30,30,.55);
+
+            text-transform: uppercase;
+
+            transition: opacity .5s ease;
+        }
+
+
+        /* =========================================
+           TRANSICIÓN AL ENTRAR
+        ========================================== */
+
+        .intro.salida {
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            pointer-events: none;
+        }
+
+        .intro.salida .logo {
+
+            transform: scale(1.35);
+
+            opacity: 0;
+        }
+
+        .intro.salida .indicacion {
+
+            opacity: 0;
+        }
+
+
+        /* =========================================
+           MÓVIL
+        ========================================== */
+
+        @media (max-width: 700px) {
+
+            .logo {
+                width: 220px;
+            }
+
+            .lente {
+                width: 190px;
+                height: 190px;
+            }
+
+            .indicacion {
+                bottom: 30px;
+                letter-spacing: 3px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         PÁGINA PRINCIPAL
+    ========================================== -->
+
+    <main class="main-page">
+
+        <div class="contenido">
+
+            <h1>JOS3</h1>
+
+            <p>
+                Página personal
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================================
+         PANTALLA DE ENTRADA
+    ========================================== -->
+
+    <section class="intro" id="intro">
+
+
+        <!-- LENTE DEL CURSOR -->
+
+        <div class="lente" id="lente">
+
+            <div class="contenido-lente"></div>
+
+        </div>
+
+
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            <img
+                src="logo-secundario.png"
+                alt="Logo JOS3"
+            >
+
+        </div>
+
+
+        <!-- INDICACIÓN -->
+
+        <div class="indicacion">
+            Mueve el cursor
+        </div>
+
+
+    </section>
+
+
+    <script>
+
+        const intro = document.getElementById("intro");
+        const lente = document.getElementById("lente");
+
+        let ratonX = window.innerWidth / 2;
+        let ratonY = window.innerHeight / 2;
+
+        let actualX = ratonX;
+        let actualY = ratonY;
+
+
+        /* =========================================
+           MOVIMIENTO DEL RATÓN
+        ========================================== */
+
+        document.addEventListener("mousemove", (evento) => {
+
+            ratonX = evento.clientX;
+            ratonY = evento.clientY;
+
+            lente.style.opacity = "1";
+
+        });
+
+
+        /* =========================================
+           MOVIMIENTO SUAVE DE LA LENTE
+        ========================================== */
+
+        function animar() {
+
+            actualX += (ratonX - actualX) * 0.12;
+            actualY += (ratonY - actualY) * 0.12;
+
+            lente.style.left = actualX + "px";
+            lente.style.top = actualY + "px";
+
+            requestAnimationFrame(animar);
+        }
+
+        animar();
+
+
+        /* =========================================
+           HACER CLIC PARA ENTRAR
+        ========================================== */
+
+        intro.addEventListener("click", () => {
+
+            intro.classList.add("salida");
+
+        });
+
+
+        /* =========================================
+           ENTRAR CON TECLADO
+        ========================================== */
+
+        document.addEventListener("keydown", (evento) => {
+
+            if (evento.key === "Enter" || evento.key === " ") {
+
+                intro.classList.add("salida");
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
