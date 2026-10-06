@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>JOS3</title>
 
 <style>
+
+/* =====================================================
+   CONFIGURACIÓN GENERAL
+===================================================== */
 
 * {
     margin: 0;
@@ -19,87 +24,92 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: #bdbdbd;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 
 /* =====================================================
-   WEB REAL QUE ESTÁ DEBAJO
+   PÁGINA REAL
 ===================================================== */
 
 .pagina {
+
     position: fixed;
+
     inset: 0;
 
     background:
         radial-gradient(
-            circle at 50% 45%,
+            circle at 50% 40%,
             #f2f2f2 0%,
             #d2d2d2 45%,
             #a8a8a8 100%
         );
 
     display: flex;
-    align-items: center;
+
     justify-content: center;
 
-    font-family: Arial, Helvetica, sans-serif;
-}
+    align-items: center;
 
-.contenido {
-    text-align: center;
-}
-
-.contenido h1 {
-    font-size: clamp(100px, 18vw, 260px);
-    font-weight: 900;
-    letter-spacing: -12px;
     color: #111;
 }
 
-.contenido p {
-    margin-top: 10px;
-    font-size: 18px;
-    letter-spacing: 6px;
-    color: #222;
-    opacity: .5;
+
+.contenido {
+
+    text-align: center;
+
 }
 
 
-/* =====================================================
-   PANTALLA DE ENTRADA
-===================================================== */
+.contenido h1 {
 
-.entrada {
-    position: fixed;
-    inset: 0;
-
-    z-index: 10;
-
-    background:
-        radial-gradient(
-            circle at center,
-            #f4f4f4 0%,
-            #dddddd 55%,
-            #c8c8c8 100%
+    font-size:
+        clamp(
+            100px,
+            18vw,
+            260px
         );
+
+    font-weight: 900;
+
+    letter-spacing: -12px;
+
+}
+
+
+.contenido p {
+
+    margin-top: 10px;
+
+    font-size: 18px;
+
+    letter-spacing: 6px;
+
+    opacity: .5;
+
 }
 
 
 /* =====================================================
-   CANVAS DE LA NIEBLA
+   NIEBLA / SALVAPANTALLAS
 ===================================================== */
 
 #niebla {
+
     position: fixed;
+
     inset: 0;
 
     width: 100%;
+
     height: 100%;
 
-    z-index: 15;
+    z-index: 20;
 
     pointer-events: none;
+
 }
 
 
@@ -108,27 +118,94 @@ body {
 ===================================================== */
 
 .logo {
+
     position: fixed;
 
     z-index: 30;
 
     left: 50%;
+
     top: 50%;
 
-    transform: translate(-50%, -50%);
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
 
-    width: min(300px, 45vw);
+    width:
+        min(
+            300px,
+            45vw
+        );
 
     pointer-events: none;
 
     filter:
         drop-shadow(
-            0 12px 25px rgba(0,0,0,.20)
+            0 12px 25px
+            rgba(
+                0,
+                0,
+                0,
+                .18
+            )
         );
 
     transition:
+
         opacity .6s ease,
+
         transform .8s ease;
+}
+
+
+/* =====================================================
+   CAPA DE NIEBLA BASE
+===================================================== */
+
+.capa-niebla {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 10;
+
+    background:
+
+        radial-gradient(
+            ellipse at center,
+            rgba(
+                250,
+                250,
+                250,
+                .72
+            ),
+
+            rgba(
+                225,
+                225,
+                225,
+                .86
+            ),
+
+            rgba(
+                205,
+                205,
+                205,
+                .94
+            )
+        );
+
+    backdrop-filter:
+        blur(12px);
+
+    -webkit-backdrop-filter:
+        blur(12px);
+
+    pointer-events: none;
+
 }
 
 
@@ -136,29 +213,41 @@ body {
    TRANSICIÓN FINAL
 ===================================================== */
 
-.entrada.final {
+.capa-niebla.salir {
+
     opacity: 0;
 
     transition:
-        opacity 1.2s ease;
+        opacity 1.1s ease;
 }
 
-.logo.final {
-    opacity: 0;
 
-    transform:
-        translate(-50%, -50%)
-        scale(1.25);
-}
+#niebla.salir {
 
-#niebla.final {
     opacity: 0;
 
     transition:
         opacity .8s ease;
 }
 
+
+.logo.salir {
+
+    opacity: 0;
+
+    transform:
+
+        translate(
+            -50%,
+            -50%
+        )
+
+        scale(1.25);
+}
+
+
 </style>
+
 </head>
 
 
@@ -166,7 +255,7 @@ body {
 
 
 <!-- =====================================================
-     PÁGINA REAL
+     PÁGINA QUE ESTÁ DEBAJO
 ===================================================== -->
 
 <div class="pagina">
@@ -183,21 +272,26 @@ body {
 
 
 <!-- =====================================================
-     CAPA DE ENTRADA
+     NIEBLA BASE
 ===================================================== -->
 
-<div class="entrada" id="entrada"></div>
+<div
+    class="capa-niebla"
+    id="capaNiebla">
+</div>
 
 
 <!-- =====================================================
-     NIEBLA
+     CANVAS PARA EL EFECTO PINCEL
 ===================================================== -->
 
-<canvas id="niebla"></canvas>
+<canvas
+    id="niebla">
+</canvas>
 
 
 <!-- =====================================================
-     LOGO
+     LOGO CENTRAL
 ===================================================== -->
 
 <img
@@ -212,45 +306,73 @@ body {
 
 
 /* =====================================================
-   CONFIGURACIÓN
+   CANVAS
 ===================================================== */
 
-const canvas = document.getElementById("niebla");
+const canvas =
+    document.getElementById(
+        "niebla"
+    );
 
-const ctx = canvas.getContext("2d");
 
-const entrada = document.getElementById("entrada");
-
-const logo = document.getElementById("logo");
+const ctx =
+    canvas.getContext(
+        "2d"
+    );
 
 
 let ancho;
+
 let alto;
 
 
+/* =====================================================
+   AJUSTAR CANVAS
+===================================================== */
+
 function ajustarCanvas() {
 
-    ancho = window.innerWidth;
-    alto = window.innerHeight;
+    ancho =
+        window.innerWidth;
 
-    canvas.width = ancho * devicePixelRatio;
-    canvas.height = alto * devicePixelRatio;
+    alto =
+        window.innerHeight;
 
-    canvas.style.width = ancho + "px";
-    canvas.style.height = alto + "px";
+
+    const dpr =
+        window.devicePixelRatio || 1;
+
+
+    canvas.width =
+        ancho * dpr;
+
+
+    canvas.height =
+        alto * dpr;
+
+
+    canvas.style.width =
+        ancho + "px";
+
+
+    canvas.style.height =
+        alto + "px";
+
 
     ctx.setTransform(
-        devicePixelRatio,
+        dpr,
         0,
         0,
-        devicePixelRatio,
+        dpr,
         0,
         0
     );
+
 }
 
 
 ajustarCanvas();
+
 
 window.addEventListener(
     "resize",
@@ -271,68 +393,169 @@ let raton = {
 };
 
 
-let posicion = {
-
-    x: ancho / 2,
-
-    y: alto / 2
-
-};
+let ultimoX =
+    raton.x;
 
 
-/* =====================================================
-   ESTELA
-===================================================== */
-
-const puntos = [];
-
-const cantidadPuntos = 18;
-
-
-for (
-    let i = 0;
-    i < cantidadPuntos;
-    i++
-) {
-
-    puntos.push({
-
-        x: raton.x,
-
-        y: raton.y,
-
-        vida: 0
-
-    });
-
-}
+let ultimoY =
+    raton.y;
 
 
 /* =====================================================
-   MOVIMIENTO
+   PINCELADAS
 ===================================================== */
+
+let pinceladas = [];
+
+
+/*
+   Cada pincelada tiene:
+
+   x
+   y
+   tamaño
+   rotación
+   vida
+   velocidad
+*/
+
 
 document.addEventListener(
     "mousemove",
     function(event) {
 
-        raton.x = event.clientX;
+        const x =
+            event.clientX;
 
-        raton.y = event.clientY;
+        const y =
+            event.clientY;
+
+
+        /*
+           Distancia recorrida
+        */
+
+        const dx =
+            x - ultimoX;
+
+        const dy =
+            y - ultimoY;
+
+
+        const distancia =
+            Math.sqrt(
+                dx * dx +
+                dy * dy
+            );
+
+
+        /*
+           Creamos varios puntos
+           dependiendo de la velocidad.
+        */
+
+        const cantidad =
+            Math.max(
+                1,
+                Math.floor(
+                    distancia / 8
+                )
+            );
+
+
+        for (
+            let i = 0;
+            i < cantidad;
+            i++
+        ) {
+
+            const porcentaje =
+                i / cantidad;
+
+
+            const px =
+                ultimoX +
+                dx * porcentaje;
+
+
+            const py =
+                ultimoY +
+                dy * porcentaje;
+
+
+            pinceladas.push({
+
+                x: px,
+
+                y: py,
+
+                /*
+                   Tamaño pequeño
+                   y ligeramente irregular
+                */
+
+                ancho:
+                    35 +
+                    Math.random() * 30,
+
+                alto:
+                    20 +
+                    Math.random() * 22,
+
+                /*
+                   Rotación siguiendo
+                   aproximadamente el movimiento
+                */
+
+                angulo:
+                    Math.atan2(
+                        dy,
+                        dx
+                    ) +
+                    (
+                        Math.random() - .5
+                    ) * .7,
+
+                /*
+                   Vida inicial
+                */
+
+                vida: 1,
+
+                /*
+                   Velocidad de desaparición
+                */
+
+                velocidad:
+                    .018 +
+                    Math.random() * .012
+
+            });
+
+        }
+
+
+        ultimoX = x;
+
+        ultimoY = y;
+
+        raton.x = x;
+
+        raton.y = y;
 
     }
 );
 
 
 /* =====================================================
-   DIBUJAR NIEBLA
+   DIBUJAR PINCELADAS
 ===================================================== */
 
 function dibujar() {
 
 
     /*
-       Limpiamos el canvas
+       Limpiamos el canvas.
     */
 
     ctx.clearRect(
@@ -344,160 +567,174 @@ function dibujar() {
 
 
     /*
-       Actualizamos posición
+       Recorremos las pinceladas
     */
 
-    posicion.x +=
-        (raton.x - posicion.x) * 0.22;
-
-    posicion.y +=
-        (raton.y - posicion.y) * 0.22;
-
-
-    /*
-       Añadimos nuevo punto
-    */
-
-    puntos.unshift({
-
-        x: posicion.x,
-
-        y: posicion.y,
-
-        vida: 1
-
-    });
-
-
-    /*
-       Limitamos la cantidad
-    */
-
-    if (
-        puntos.length >
-        cantidadPuntos
+    for (
+        let i = pinceladas.length - 1;
+        i >= 0;
+        i--
     ) {
 
-        puntos.pop();
+        const p =
+            pinceladas[i];
+
+
+        /*
+           Reducimos la vida.
+        */
+
+        p.vida -=
+            p.velocidad;
+
+
+        /*
+           Si ya desapareció,
+           la eliminamos.
+        */
+
+        if (
+            p.vida <= 0
+        ) {
+
+            pinceladas.splice(
+                i,
+                1
+            );
+
+            continue;
+
+        }
+
+
+        /*
+           Creamos un degradado
+           suave.
+        */
+
+        const radio =
+            Math.max(
+                p.ancho,
+                p.alto
+            );
+
+
+        const gradiente =
+            ctx.createRadialGradient(
+
+                0,
+                0,
+                0,
+
+                0,
+                0,
+                radio
+
+            );
+
+
+        /*
+           La parte central
+           es transparente.
+
+           Esto permite ver
+           la página real.
+        */
+
+        gradiente.addColorStop(
+            0,
+            `rgba(
+                255,
+                255,
+                255,
+                ${p.vida}
+            )`
+        );
+
+
+        gradiente.addColorStop(
+            .35,
+            `rgba(
+                255,
+                255,
+                255,
+                ${p.vida * .75}
+            )`
+        );
+
+
+        gradiente.addColorStop(
+            .75,
+            `rgba(
+                255,
+                255,
+                255,
+                ${p.vida * .25}
+            )`
+        );
+
+
+        gradiente.addColorStop(
+            1,
+            "rgba(255,255,255,0)"
+        );
+
+
+        /*
+           Pintamos la forma.
+        */
+
+        ctx.save();
+
+
+        ctx.translate(
+            p.x,
+            p.y
+        );
+
+
+        ctx.rotate(
+            p.angulo
+        );
+
+
+        ctx.scale(
+            1,
+            p.alto /
+            p.ancho
+        );
+
+
+        ctx.globalCompositeOperation =
+            "destination-out";
+
+
+        ctx.fillStyle =
+            gradiente;
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+            0,
+            0,
+            p.ancho,
+            0,
+            Math.PI * 2
+        );
+
+
+        ctx.fill();
+
+
+        ctx.restore();
 
     }
 
 
-    /* =================================================
-       ESTELA DE NIEBLA
-    ================================================= */
-
-    puntos.forEach(
-        function(punto, indice) {
-
-            const escala =
-                1 -
-                indice /
-                cantidadPuntos;
-
-
-            const radioX =
-                48 +
-                escala * 25;
-
-
-            const radioY =
-                32 +
-                escala * 18;
-
-
-            /*
-               Nube principal
-            */
-
-            const gradiente =
-                ctx.createRadialGradient(
-
-                    punto.x,
-                    punto.y,
-
-                    0,
-
-                    punto.x,
-                    punto.y,
-
-                    radioX
-
-                );
-
-
-            /*
-               Transparencia de la nube
-            */
-
-            const alpha =
-                0.92 *
-                escala *
-                escala;
-
-
-            gradiente.addColorStop(
-                0,
-                `rgba(255,255,255,${alpha})`
-            );
-
-
-            gradiente.addColorStop(
-                .35,
-                `rgba(255,255,255,${alpha * .65})`
-            );
-
-
-            gradiente.addColorStop(
-                1,
-                "rgba(255,255,255,0)"
-            );
-
-
-            ctx.save();
-
-
-            /*
-               Forma ovalada
-            */
-
-            ctx.translate(
-                punto.x,
-                punto.y
-            );
-
-
-            ctx.scale(
-                1,
-                radioY / radioX
-            );
-
-
-            ctx.fillStyle =
-                gradiente;
-
-
-            ctx.beginPath();
-
-            ctx.arc(
-                0,
-                0,
-                radioX,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fill();
-
-
-            ctx.restore();
-
-        }
-    );
-
-
     /*
-       Siguiente frame
+       Próximo frame
     */
 
     requestAnimationFrame(
@@ -511,40 +748,76 @@ dibujar();
 
 
 /* =====================================================
-   CLICK
+   CLICK PARA ENTRAR
 ===================================================== */
+
+let entrando =
+    false;
+
 
 document.addEventListener(
     "click",
     function() {
 
-
-        entrada.classList.add(
-            "final"
-        );
-
-
-        logo.classList.add(
-            "final"
-        );
+        if (
+            entrando
+        ) return;
 
 
-        canvas.classList.add(
-            "final"
-        );
+        entrando = true;
 
+
+        /*
+           Quitamos niebla
+        */
+
+        document
+            .getElementById(
+                "capaNiebla"
+            )
+            .classList
+            .add(
+                "salir"
+            );
+
+
+        canvas
+            .classList
+            .add(
+                "salir"
+            );
+
+
+        logo
+            .classList
+            .add(
+                "salir"
+            );
+
+
+        /*
+           Después de la transición
+        */
 
         setTimeout(
             function() {
 
-                entrada.style.display =
+                document
+                    .getElementById(
+                        "capaNiebla"
+                    )
+                    .style
+                    .display =
                     "none";
+
 
                 canvas.style.display =
                     "none";
 
+
                 logo.style.display =
                     "none";
+
 
                 document.body.style.overflow =
                     "auto";
