@@ -1,642 +1,410 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>JOS3</title>
 
-
 <style>
-
-/* =====================================================
-   CONFIGURACIÓN
-===================================================== */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-
     font-family: Arial, Helvetica, sans-serif;
-
-    background: #dcdcd9;
 }
 
-
-/* =====================================================
-   WEB REAL
-===================================================== */
+/* =========================
+   PÁGINA REAL
+========================= */
 
 .pagina {
-
     position: fixed;
-
     inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    overflow: hidden;
-
     background:
-
-        radial-gradient(
-            circle at 50% 40%,
-            #ffffff 0%,
-            #e3e3e1 45%,
-            #c4c4c1 100%
-        );
-
+        radial-gradient(circle at 50% 40%, #eeeeee 0%, #cfcfcf 45%, #a9a9a9 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: #111;
+}
 
-    transform: scale(1.02);
+.contenido {
+    text-align: center;
+}
 
-    transition:
-        transform 1.5s
-        cubic-bezier(.16,1,.3,1);
+.contenido h1 {
+    font-size: clamp(90px, 18vw, 260px);
+    font-weight: 900;
+    letter-spacing: -15px;
+}
+
+.contenido p {
+    margin-top: 15px;
+    font-size: 18px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    opacity: 0.55;
 }
 
 
-/* Brillos de fondo */
+/* =========================
+   CAPA DE ENTRADA
+========================= */
 
-.pagina::before {
-
-    content: "";
-
-    position: absolute;
-
-    inset: -20%;
+.entrada {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
 
     background:
-
         radial-gradient(
-            circle at 20% 20%,
-            rgba(255,255,255,.9),
-            transparent 30%
+            circle at center,
+            rgba(245,245,245,0.97),
+            rgba(215,215,215,0.98)
+        );
+
+    overflow: hidden;
+
+    /* Máscara que crea la "nube" */
+    -webkit-mask-image:
+        radial-gradient(
+            ellipse 55px 42px at var(--mouse-x) var(--mouse-y),
+            transparent 0%,
+            transparent 30%,
+            rgba(0,0,0,0.35) 48%,
+            rgba(0,0,0,0.85) 72%,
+            black 100%
+        );
+
+    mask-image:
+        radial-gradient(
+            ellipse 55px 42px at var(--mouse-x) var(--mouse-y),
+            transparent 0%,
+            transparent 30%,
+            rgba(0,0,0,0.35) 48%,
+            rgba(0,0,0,0.85) 72%,
+            black 100%
+        );
+
+    transition: opacity 0.4s ease;
+}
+
+
+/* =========================
+   ESTELA
+========================= */
+
+.estela {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 11;
+
+    opacity: 0.9;
+
+    background:
+        radial-gradient(
+            ellipse 85px 55px at var(--trail-x1) var(--trail-y1),
+            rgba(255,255,255,0.18),
+            transparent 70%
         ),
 
         radial-gradient(
-            circle at 80% 80%,
-            rgba(255,255,255,.5),
-            transparent 35%
-        );
-
-    pointer-events: none;
-}
-
-
-/* =====================================================
-   CONTENIDO DE LA WEB
-===================================================== */
-
-.contenido-web {
-
-    position: relative;
-
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    flex-direction: column;
-
-    text-align: center;
-
-    z-index: 2;
-}
-
-
-.titulo-web {
-
-    font-size:
-        clamp(100px, 17vw, 260px);
-
-    font-weight: 900;
-
-    letter-spacing: -15px;
-
-    color: #111;
-
-    line-height: .8;
-}
-
-
-.subtitulo-web {
-
-    margin-top: 35px;
-
-    font-size: 13px;
-
-    letter-spacing: 9px;
-
-    color: #555;
-
-    text-transform: uppercase;
-}
-
-
-/* =====================================================
-   PANTALLA DE ENTRADA
-===================================================== */
-
-.entrada {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 10;
-
-    /*
-       La parte gris está encima de la web.
-       La zona alrededor del ratón será transparente.
-    */
-
-    background:
+            ellipse 130px 65px at var(--trail-x2) var(--trail-y2),
+            rgba(255,255,255,0.12),
+            transparent 75%
+        ),
 
         radial-gradient(
-            circle 170px at var(--mouse-x) var(--mouse-y),
-
-            rgba(255,255,255,0) 0%,
-
-            rgba(255,255,255,0) 65%,
-
-            rgba(225,225,222,.30) 76%,
-
-            rgba(225,225,222,.88) 100%
+            ellipse 180px 75px at var(--trail-x3) var(--trail-y3),
+            rgba(255,255,255,0.08),
+            transparent 80%
         );
 
-    backdrop-filter:
-        blur(16px);
-
-    -webkit-backdrop-filter:
-        blur(16px);
-
-    cursor: none;
-
-    transition:
-        opacity 1.2s ease,
-        visibility 1.2s ease;
+    filter: blur(12px);
 }
 
 
-/* =====================================================
-   CAPA GRIS GENERAL
-===================================================== */
+/* =========================
+   LOGO
+========================= */
 
-.entrada::before {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background:
-
-        radial-gradient(
-            circle 170px at var(--mouse-x) var(--mouse-y),
-
-            rgba(230,230,227,0) 0%,
-
-            rgba(230,230,227,.08) 55%,
-
-            rgba(230,230,227,.72) 100%
-        );
-
-    pointer-events: none;
-}
-
-
-/* =====================================================
-   LOGO CENTRAL
-===================================================== */
-
-.logo-central {
-
+.logo {
     position: fixed;
+    z-index: 20;
 
     left: 50%;
     top: 50%;
 
-    transform:
-        translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 
-    width:
-        min(520px, 55vw);
-
-    z-index: 30;
+    width: min(270px, 42vw);
 
     pointer-events: none;
-
-    user-select: none;
-
-    transition:
-
-        transform 1.2s
-        cubic-bezier(.16,1,.3,1),
-
-        opacity 1s ease;
-}
-
-
-.logo-central img {
-
-    width: 100%;
-
-    height: auto;
-
-    display: block;
 
     filter:
-
-        drop-shadow(
-            0 25px 35px
-            rgba(0,0,0,.20)
-        );
+        drop-shadow(0 10px 20px rgba(0,0,0,0.18));
 }
 
 
-/* =====================================================
-   BORDE DE LA LENTE
-===================================================== */
-
-.lente {
-
-    position: fixed;
-
-    left: 0;
-    top: 0;
-
-    width: 340px;
-    height: 340px;
-
-    transform:
-        translate(-50%, -50%);
-
-    border-radius: 50%;
-
-    pointer-events: none;
-
-    z-index: 25;
-
-    opacity: 0;
-
-    border:
-
-        1px solid
-        rgba(255,255,255,.85);
-
-    box-shadow:
-
-        0 0 25px
-        rgba(255,255,255,.5),
-
-        0 15px 50px
-        rgba(0,0,0,.12),
-
-        inset 0 0 30px
-        rgba(255,255,255,.25);
-
-    transition:
-        opacity .4s ease;
-}
-
-
-/* Reflejo de cristal */
-
-.lente::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 55%;
-    height: 55%;
-
-    top: -10%;
-    left: -10%;
-
-    border-radius: 50%;
-
-    background:
-
-        radial-gradient(
-            circle,
-            rgba(255,255,255,.65),
-            transparent 65%
-        );
-
-    filter: blur(10px);
-}
-
-
-/* =====================================================
-   AL HACER CLICK
-===================================================== */
+/* =========================
+   CLICK / TRANSICIÓN
+========================= */
 
 .entrada.expandir {
+    -webkit-mask-image:
+        radial-gradient(
+            circle 150vmax at var(--mouse-x) var(--mouse-y),
+            transparent 0%,
+            transparent 100%
+        );
 
-    animation:
+    mask-image:
+        radial-gradient(
+            circle 150vmax at var(--mouse-x) var(--mouse-y),
+            transparent 0%,
+            transparent 100%
+        );
 
-        expandirEntrada
-        1.5s
-        cubic-bezier(.16,1,.3,1)
-        forwards;
+    transition:
+        -webkit-mask-image 1.2s ease,
+        mask-image 1.2s ease;
 }
 
-
-@keyframes expandirEntrada {
-
-    0% {
-
-        clip-path:
-
-            circle(
-                170px
-                at var(--mouse-x)
-                var(--mouse-y)
-            );
-
-        opacity: 1;
-    }
-
-    100% {
-
-        clip-path:
-
-            circle(
-                150vmax
-                at var(--mouse-x)
-                var(--mouse-y)
-            );
-
-        opacity: 0;
-    }
-}
-
-
-/* =====================================================
-   LOGO AL ENTRAR
-===================================================== */
-
-.entrada.expandir
-.logo-central {
-
-    transform:
-
-        translate(-50%, -50%)
-        scale(.65);
-
+.logo.desaparecer {
     opacity: 0;
+    transform:
+        translate(-50%, -50%)
+        scale(1.25);
+
+    transition:
+        opacity 0.5s ease,
+        transform 0.8s ease;
+}
+
+.estela.ocultar {
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }
 
 
-/* =====================================================
+/* =========================
    MÓVIL
-===================================================== */
+========================= */
 
 @media (max-width: 700px) {
 
-    .logo-central {
-
-        width: 75vw;
+    .logo {
+        width: 55vw;
     }
 
-    .lente {
+    .entrada {
+        -webkit-mask-image:
+            radial-gradient(
+                ellipse 45px 35px at var(--mouse-x) var(--mouse-y),
+                transparent 0%,
+                transparent 30%,
+                rgba(0,0,0,0.4) 50%,
+                black 100%
+            );
 
-        width: 230px;
-        height: 230px;
-    }
-
-    .titulo-web {
-
-        font-size: 25vw;
-
-        letter-spacing: -5px;
-    }
-
-    .subtitulo-web {
-
-        font-size: 9px;
-
-        letter-spacing: 5px;
+        mask-image:
+            radial-gradient(
+                ellipse 45px 35px at var(--mouse-x) var(--mouse-y),
+                transparent 0%,
+                transparent 30%,
+                rgba(0,0,0,0.4) 50%,
+                black 100%
+            );
     }
 }
-
 </style>
-
 </head>
 
 
 <body>
 
+<!-- =========================
+     PÁGINA REAL
+========================= -->
 
-<!-- =====================================================
-     WEB REAL
-===================================================== -->
+<div class="pagina">
 
-<main class="pagina">
-
-    <div class="contenido-web">
-
-        <div class="titulo-web">
-            JOS3
-        </div>
-
-        <div class="subtitulo-web">
-            Página personal
-        </div>
-
+    <div class="contenido">
+        <h1>JOS3</h1>
+        <p>Página personal</p>
     </div>
 
-</main>
+</div>
 
 
-<!-- =====================================================
-     PANTALLA DE ENTRADA
-===================================================== -->
+<!-- =========================
+     CAPA DE NIEBLA
+========================= -->
 
-<section
-    class="entrada"
-    id="entrada"
+<div class="entrada" id="entrada"></div>
+
+<!-- Estela -->
+<div class="estela" id="estela"></div>
+
+
+<!-- LOGO -->
+<img
+    src="logo-secundario.png"
+    alt="JOS3"
+    class="logo"
+    id="logo"
 >
-
-
-    <!-- LENTE -->
-
-    <div
-        class="lente"
-        id="lente"
-    ></div>
-
-
-    <!-- LOGO -->
-
-    <div class="logo-central">
-
-        <img
-            src="logo-secundario.png"
-            alt="JOS3"
-        >
-
-    </div>
-
-
-</section>
 
 
 <script>
 
-/* =====================================================
-   ELEMENTOS
-===================================================== */
+const entrada = document.getElementById("entrada");
+const estela = document.getElementById("estela");
+const logo = document.getElementById("logo");
 
-const entrada =
-    document.getElementById("entrada");
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
 
-const lente =
-    document.getElementById("lente");
+let trail = [
+    { x: mouseX, y: mouseY },
+    { x: mouseX, y: mouseY },
+    { x: mouseX, y: mouseY }
+];
 
-
-/* =====================================================
-   POSICIÓN DEL RATÓN
-===================================================== */
-
-let mouseX =
-    window.innerWidth / 2;
-
-let mouseY =
-    window.innerHeight / 2;
+let activo = true;
 
 
-let actualX =
-    mouseX;
-
-let actualY =
-    mouseY;
-
-
-/* =====================================================
+/* =========================
    MOVIMIENTO DEL RATÓN
-===================================================== */
+========================= */
 
-document.addEventListener(
-    "mousemove",
-    function(evento) {
+document.addEventListener("mousemove", (e) => {
 
-        mouseX =
-            evento.clientX;
+    mouseX = e.clientX;
+    mouseY = e.clientY;
 
-        mouseY =
-            evento.clientY;
-
-        lente.style.opacity = "1";
-
-    }
-);
+});
 
 
-/* =====================================================
-   MOVIMIENTO SUAVE
-===================================================== */
+/* =========================
+   ANIMACIÓN SUAVE
+========================= */
 
 function animar() {
 
-    actualX +=
-        (mouseX - actualX) * 0.12;
-
-    actualY +=
-        (mouseY - actualY) * 0.12;
-
+    if (!activo) return;
 
     /*
-       Movemos la lente
+       El punto principal sigue al ratón
+       rápidamente.
     */
 
-    lente.style.left =
-        actualX + "px";
-
-    lente.style.top =
-        actualY + "px";
+    trail[0].x += (mouseX - trail[0].x) * 0.22;
+    trail[0].y += (mouseY - trail[0].y) * 0.22;
 
 
     /*
-       Estas variables controlan
-       el agujero de la pantalla gris.
+       Estos puntos siguen al anterior
+       más lentamente, creando la estela.
+    */
+
+    trail[1].x += (trail[0].x - trail[1].x) * 0.12;
+    trail[1].y += (trail[0].y - trail[1].y) * 0.12;
+
+    trail[2].x += (trail[1].x - trail[2].x) * 0.08;
+    trail[2].y += (trail[1].y - trail[2].y) * 0.08;
+
+
+    /*
+       Posición de la zona transparente.
     */
 
     entrada.style.setProperty(
         "--mouse-x",
-        actualX + "px"
+        trail[0].x + "px"
     );
 
     entrada.style.setProperty(
         "--mouse-y",
-        actualY + "px"
+        trail[0].y + "px"
+    );
+
+
+    /*
+       Posiciones de la nube/estela.
+    */
+
+    estela.style.setProperty(
+        "--trail-x1",
+        trail[0].x + "px"
+    );
+
+    estela.style.setProperty(
+        "--trail-y1",
+        trail[0].y + "px"
+    );
+
+    estela.style.setProperty(
+        "--trail-x2",
+        trail[1].x + "px"
+    );
+
+    estela.style.setProperty(
+        "--trail-y2",
+        trail[1].y + "px"
+    );
+
+    estela.style.setProperty(
+        "--trail-x3",
+        trail[2].x + "px"
+    );
+
+    estela.style.setProperty(
+        "--trail-y3",
+        trail[2].y + "px"
     );
 
 
     requestAnimationFrame(animar);
 }
 
-
 animar();
 
 
-/* =====================================================
-   ENTRAR EN LA WEB
-===================================================== */
+/* =========================
+   CLICK
+========================= */
 
-entrada.addEventListener(
-    "click",
-    function() {
+document.addEventListener("click", () => {
 
-        entrada.classList.add(
-            "expandir"
-        );
+    if (!activo) return;
 
-    }
-);
+    activo = false;
 
+    entrada.classList.add("expandir");
+    logo.classList.add("desaparecer");
+    estela.classList.add("ocultar");
 
-/* =====================================================
-   TECLADO
-===================================================== */
+    setTimeout(() => {
 
-document.addEventListener(
-    "keydown",
-    function(evento) {
+        entrada.style.display = "none";
+        estela.style.display = "none";
+        logo.style.display = "none";
 
-        if (
-            evento.key === "Enter" ||
-            evento.key === " "
-        ) {
+        document.body.style.overflow = "auto";
 
-            entrada.click();
+    }, 1300);
 
-        }
-
-    }
-);
+});
 
 </script>
 
-
 </body>
-
 </html>
