@@ -29,7 +29,7 @@ body {
 
 
 /* =====================================================
-   PÁGINA REAL
+   PÁGINA PRINCIPAL
 ===================================================== */
 
 .pagina {
@@ -41,9 +41,9 @@ body {
     background:
         radial-gradient(
             circle at 50% 40%,
-            #f2f2f2 0%,
-            #d2d2d2 45%,
-            #a8a8a8 100%
+            #f4f4f4 0%,
+            #e2e2e2 45%,
+            #cccccc 100%
         );
 
     display: flex;
@@ -93,7 +93,49 @@ body {
 
 
 /* =====================================================
-   NIEBLA / SALVAPANTALLAS
+   CAPA DE SALVAPANTALLAS GRIS
+===================================================== */
+
+.capa-niebla {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 10;
+
+    /*
+       Fondo grisáceo.
+       Más oscuro que la página principal
+       para que el efecto se diferencie.
+    */
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(175, 175, 175, 0.94) 0%,
+            rgba(145, 145, 145, 0.96) 55%,
+            rgba(115, 115, 115, 0.98) 100%
+        );
+
+    /*
+       Ligero desenfoque para dar
+       sensación de cristal/niebla.
+    */
+
+    backdrop-filter:
+        blur(10px);
+
+    -webkit-backdrop-filter:
+        blur(10px);
+
+    pointer-events: none;
+
+}
+
+
+/* =====================================================
+   CANVAS DEL EFECTO PINCEL
 ===================================================== */
 
 #niebla {
@@ -114,7 +156,7 @@ body {
 
 
 /* =====================================================
-   LOGO
+   LOGO CENTRAL
 ===================================================== */
 
 .logo {
@@ -148,7 +190,7 @@ body {
                 0,
                 0,
                 0,
-                .18
+                .20
             )
         );
 
@@ -157,60 +199,12 @@ body {
         opacity .6s ease,
 
         transform .8s ease;
-}
-
-
-/* =====================================================
-   CAPA DE NIEBLA BASE
-===================================================== */
-
-.capa-niebla {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 10;
-
-    background:
-
-        radial-gradient(
-            ellipse at center,
-            rgba(
-                250,
-                250,
-                250,
-                .72
-            ),
-
-            rgba(
-                225,
-                225,
-                225,
-                .86
-            ),
-
-            rgba(
-                205,
-                205,
-                205,
-                .94
-            )
-        );
-
-    backdrop-filter:
-        blur(12px);
-
-    -webkit-backdrop-filter:
-        blur(12px);
-
-    pointer-events: none;
 
 }
 
 
 /* =====================================================
-   TRANSICIÓN FINAL
+   TRANSICIÓN AL ENTRAR
 ===================================================== */
 
 .capa-niebla.salir {
@@ -219,6 +213,7 @@ body {
 
     transition:
         opacity 1.1s ease;
+
 }
 
 
@@ -228,6 +223,7 @@ body {
 
     transition:
         opacity .8s ease;
+
 }
 
 
@@ -243,8 +239,23 @@ body {
         )
 
         scale(1.25);
+
 }
 
+
+/* =====================================================
+   MÓVIL
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .logo {
+
+        width: 55vw;
+
+    }
+
+}
 
 </style>
 
@@ -255,7 +266,7 @@ body {
 
 
 <!-- =====================================================
-     PÁGINA QUE ESTÁ DEBAJO
+     PÁGINA REAL
 ===================================================== -->
 
 <div class="pagina">
@@ -272,7 +283,7 @@ body {
 
 
 <!-- =====================================================
-     NIEBLA BASE
+     SALVAPANTALLAS
 ===================================================== -->
 
 <div
@@ -282,7 +293,7 @@ body {
 
 
 <!-- =====================================================
-     CANVAS PARA EL EFECTO PINCEL
+     CANVAS DEL PINCEL
 ===================================================== -->
 
 <canvas
@@ -291,7 +302,7 @@ body {
 
 
 <!-- =====================================================
-     LOGO CENTRAL
+     LOGO J3
 ===================================================== -->
 
 <img
@@ -381,7 +392,7 @@ window.addEventListener(
 
 
 /* =====================================================
-   RATÓN
+   POSICIÓN DEL RATÓN
 ===================================================== */
 
 let raton = {
@@ -408,17 +419,9 @@ let ultimoY =
 let pinceladas = [];
 
 
-/*
-   Cada pincelada tiene:
-
-   x
-   y
-   tamaño
-   rotación
-   vida
-   velocidad
-*/
-
+/* =====================================================
+   MOVIMIENTO DEL RATÓN
+===================================================== */
 
 document.addEventListener(
     "mousemove",
@@ -450,15 +453,15 @@ document.addEventListener(
 
 
         /*
-           Creamos varios puntos
-           dependiendo de la velocidad.
+           Número de pinceladas
+           según la distancia.
         */
 
         const cantidad =
             Math.max(
                 1,
                 Math.floor(
-                    distancia / 8
+                    distancia / 7
                 )
             );
 
@@ -490,21 +493,19 @@ document.addEventListener(
                 y: py,
 
                 /*
-                   Tamaño pequeño
-                   y ligeramente irregular
+                   Tamaño de la pincelada.
                 */
 
                 ancho:
-                    35 +
-                    Math.random() * 30,
+                    32 +
+                    Math.random() * 28,
 
                 alto:
-                    20 +
-                    Math.random() * 22,
+                    18 +
+                    Math.random() * 20,
 
                 /*
-                   Rotación siguiendo
-                   aproximadamente el movimiento
+                   Dirección del movimiento.
                 */
 
                 angulo:
@@ -514,20 +515,21 @@ document.addEventListener(
                     ) +
                     (
                         Math.random() - .5
-                    ) * .7,
+                    ) * .8,
 
                 /*
-                   Vida inicial
+                   Vida inicial.
                 */
 
                 vida: 1,
 
                 /*
-                   Velocidad de desaparición
+                   Velocidad de desaparición.
+                   Aproximadamente menos de 1 segundo.
                 */
 
                 velocidad:
-                    .018 +
+                    .022 +
                     Math.random() * .012
 
             });
@@ -548,7 +550,7 @@ document.addEventListener(
 
 
 /* =====================================================
-   DIBUJAR PINCELADAS
+   ANIMACIÓN DEL PINCEL
 ===================================================== */
 
 function dibujar() {
@@ -567,7 +569,7 @@ function dibujar() {
 
 
     /*
-       Recorremos las pinceladas
+       Recorremos todas las pinceladas.
     */
 
     for (
@@ -589,8 +591,8 @@ function dibujar() {
 
 
         /*
-           Si ya desapareció,
-           la eliminamos.
+           Cuando desaparece,
+           eliminamos la pincelada.
         */
 
         if (
@@ -608,8 +610,7 @@ function dibujar() {
 
 
         /*
-           Creamos un degradado
-           suave.
+           Radio máximo.
         */
 
         const radio =
@@ -618,6 +619,10 @@ function dibujar() {
                 p.alto
             );
 
+
+        /*
+           Degradado suave.
+        */
 
         const gradiente =
             ctx.createRadialGradient(
@@ -634,11 +639,7 @@ function dibujar() {
 
 
         /*
-           La parte central
-           es transparente.
-
-           Esto permite ver
-           la página real.
+           Centro transparente.
         */
 
         gradiente.addColorStop(
@@ -653,7 +654,7 @@ function dibujar() {
 
 
         gradiente.addColorStop(
-            .35,
+            .30,
             `rgba(
                 255,
                 255,
@@ -664,7 +665,7 @@ function dibujar() {
 
 
         gradiente.addColorStop(
-            .75,
+            .70,
             `rgba(
                 255,
                 255,
@@ -681,7 +682,7 @@ function dibujar() {
 
 
         /*
-           Pintamos la forma.
+           Dibujamos la pincelada.
         */
 
         ctx.save();
@@ -704,6 +705,11 @@ function dibujar() {
             p.ancho
         );
 
+
+        /*
+           destination-out hace
+           transparente la niebla.
+        */
 
         ctx.globalCompositeOperation =
             "destination-out";
@@ -733,10 +739,6 @@ function dibujar() {
     }
 
 
-    /*
-       Próximo frame
-    */
-
     requestAnimationFrame(
         dibujar
     );
@@ -748,7 +750,7 @@ dibujar();
 
 
 /* =====================================================
-   CLICK PARA ENTRAR
+   ENTRAR EN LA PÁGINA
 ===================================================== */
 
 let entrando =
@@ -768,7 +770,7 @@ document.addEventListener(
 
 
         /*
-           Quitamos niebla
+           Desaparece la niebla.
         */
 
         document
@@ -781,12 +783,20 @@ document.addEventListener(
             );
 
 
+        /*
+           Desaparece el efecto.
+        */
+
         canvas
             .classList
             .add(
                 "salir"
             );
 
+
+        /*
+           Desaparece el logo.
+        */
 
         logo
             .classList
@@ -796,7 +806,7 @@ document.addEventListener(
 
 
         /*
-           Después de la transición
+           Terminada la transición.
         */
 
         setTimeout(
@@ -828,7 +838,6 @@ document.addEventListener(
 
     }
 );
-
 
 </script>
 
