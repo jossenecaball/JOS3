@@ -7,6 +7,10 @@
 <title>JOS3</title>
 
 <style>
+/* =========================================================
+   RESET
+========================================================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -15,15 +19,17 @@
 
 html {
     scroll-behavior: smooth;
-    overflow-x: hidden;
+    background: #080808;
 }
 
 body {
+    margin: 0;
     background: #080808;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     overflow-x: hidden;
 }
+
 
 /* =========================================================
    WEB PRINCIPAL
@@ -31,639 +37,558 @@ body {
 
 .pagina {
     min-height: 100vh;
+
     background:
-        radial-gradient(circle at 50% 20%, #3a3a3a 0%, #1d1d1d 45%, #080808 100%);
+        radial-gradient(
+            circle at 50% 0%,
+            #3a3a3a 0%,
+            #252525 32%,
+            #111111 68%,
+            #080808 100%
+        );
+
     position: relative;
-    overflow: hidden;
+    z-index: 1;
 }
+
+/* textura industrial muy sutil */
 
 .pagina::before {
     content: "";
-    position: absolute;
+    position: fixed;
     inset: 0;
-    pointer-events: none;
-    opacity: 0.12;
 
-    background-image:
+    background:
         repeating-linear-gradient(
             135deg,
-            transparent 0px,
-            transparent 7px,
-            rgba(255,255,255,0.08) 8px,
-            transparent 9px
+            rgba(255,255,255,0.018) 0px,
+            rgba(255,255,255,0.018) 1px,
+            transparent 1px,
+            transparent 8px
         );
+
+    pointer-events: none;
+    z-index: 0;
 }
 
+
 /* =========================================================
-   PORTADA
+   HERO
 ========================================================= */
 
 .hero {
     min-height: 100vh;
-    height: 100vh;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
+    text-align: center;
+
     position: relative;
     z-index: 2;
+
+    padding: 60px 20px;
 }
 
-.logo-principal {
-    width: min(650px, 75vw);
-    max-width: 650px;
+.hero-logo {
+    width: min(700px, 82vw);
     height: auto;
 
+    display: block;
+
     filter:
-        drop-shadow(0 15px 30px rgba(0,0,0,0.7))
-        drop-shadow(0 0 20px rgba(255,255,255,0.08));
+        drop-shadow(0 12px 30px rgba(0,0,0,0.6));
+
+    user-select: none;
+    pointer-events: none;
 }
 
-.linea {
-    width: min(520px, 65vw);
+.hero-line {
+    width: min(600px, 75vw);
     height: 1px;
 
     margin-top: 35px;
 
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,0.7),
-        transparent
-    );
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,0.7),
+            transparent
+        );
 }
 
-.subtitulo {
+.hero-subtitle {
     margin-top: 18px;
 
     font-size: 12px;
-    letter-spacing: 7px;
-    color: #bcbcbc;
-    text-align: center;
+    letter-spacing: 5px;
+
+    color: rgba(255,255,255,0.62);
+
+    font-weight: 500;
 }
+
 
 /* =========================================================
    HIGHLIGHTS
 ========================================================= */
 
 .highlights {
-    min-height: 430vh;
     position: relative;
     z-index: 2;
 
-    padding-top: 8vh;
+    padding: 150px 0 220px;
+
+    overflow: hidden;
 }
 
-.highlights-title {
-    position: sticky;
-    top: 10vh;
-
-    height: 24vh;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    pointer-events: none;
-
-    z-index: 5;
-
-    will-change: transform, opacity;
-}
-
-.highlights-title h2 {
-    font-size: clamp(70px, 14vw, 210px);
-    font-weight: 900;
-
-    letter-spacing: -8px;
-
-    color: transparent;
-
-    -webkit-text-stroke: 1px rgba(255,255,255,0.5);
-
-    opacity: 0.9;
-
-    will-change: transform, opacity;
-}
-
-/* =========================================================
-   DATOS
-========================================================= */
-
-.highlight-info {
-    position: absolute;
-
-    left: 5vw;
-    top: 39vh;
-
-    z-index: 10;
-
-    font-size: 10px;
-    letter-spacing: 4px;
-
-    color: rgba(255,255,255,0.5);
-
-    line-height: 2.2;
-}
-
-.highlight-info span {
-    color: white;
-}
-
-.tech-line {
-    position: absolute;
-
-    top: 46vh;
-    right: 5vw;
-
-    width: 180px;
-    height: 1px;
-
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,0.5)
-    );
-}
-
-/* =========================================================
-   NOMBRE DEL PROYECTO
-========================================================= */
-
-.project-name {
-    position: absolute;
-
-    top: 67vh;
-    left: 50%;
-
-    transform:
-        translate3d(-50%, 40px, 0);
-
+.section-title {
     text-align: center;
 
-    z-index: 7;
-
-    opacity: 0;
-
-    will-change: transform, opacity;
-}
-
-.project-small {
-    font-size: 10px;
-    letter-spacing: 6px;
-    color: rgba(255,255,255,0.5);
-
-    margin-bottom: 12px;
-}
-
-.project-name h3 {
     font-size: clamp(42px, 7vw, 100px);
     font-weight: 900;
 
     letter-spacing: -4px;
 
-    white-space: nowrap;
+    margin-bottom: 25px;
 }
 
+.section-description {
+    max-width: 650px;
+
+    margin: 0 auto 130px;
+
+    padding: 0 25px;
+
+    text-align: center;
+
+    color: rgba(255,255,255,0.55);
+
+    line-height: 1.7;
+
+    font-size: 15px;
+}
+
+
 /* =========================================================
-   VÍDEO VERTICAL
+   FA 470CC
 ========================================================= */
 
-.vertical-scene {
+.highlight {
     position: relative;
 
-    width: 100%;
-    height: 135vh;
+    min-height: 1700px;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 0 20px;
+}
 
-    margin-top: 3vh;
+.highlight-info {
+    width: min(900px, 90vw);
+
+    margin: 0 auto 80px;
+
+    text-align: center;
+}
+
+.highlight-number {
+    font-size: 12px;
+
+    letter-spacing: 5px;
+
+    color: rgba(255,255,255,0.4);
+
+    margin-bottom: 15px;
+}
+
+.highlight-title {
+    font-size: clamp(45px, 8vw, 110px);
+
+    font-weight: 900;
+
+    letter-spacing: -5px;
+
+    line-height: 0.9;
+}
+
+.highlight-subtitle {
+    margin-top: 25px;
+
+    color: rgba(255,255,255,0.55);
+
+    letter-spacing: 3px;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   VIDEO VERTICAL
+========================================================= */
+
+.vertical-video-wrap {
+    width: min(380px, 75vw);
+
+    margin: 0 auto;
+
+    position: relative;
 
     perspective: 1200px;
 }
 
 .vertical-video {
-    position: relative;
+    width: 100%;
+    height: auto;
 
-    width: min(390px, 68vw);
-    aspect-ratio: 9 / 16;
+    display: block;
 
-    overflow: hidden;
+    border-radius: 4px;
 
-    background: #050505;
-
-    border: 1px solid rgba(255,255,255,0.2);
+    background: #000;
 
     box-shadow:
-        0 60px 120px rgba(0,0,0,0.9),
-        0 0 80px rgba(255,255,255,0.04);
+        0 30px 80px rgba(0,0,0,0.7);
 
     transform:
-        translate3d(0, 180px, 0)
-        rotateX(12deg)
-        rotateY(-8deg)
-        scale(0.65);
+        translate3d(0, 80px, 0)
+        scale(0.82)
+        rotateX(12deg);
 
     opacity: 0;
+
+    transition:
+        transform 1s cubic-bezier(.16,1,.3,1),
+        opacity 0.8s ease;
 
     will-change: transform, opacity;
 }
 
-.vertical-video::before {
-    content: "";
-    position: absolute;
+.vertical-video.active {
+    transform:
+        translate3d(0, 0, 0)
+        scale(1)
+        rotateX(0deg);
 
-    inset: 12px;
-
-    border: 1px solid rgba(255,255,255,0.12);
-
-    z-index: 4;
-
-    pointer-events: none;
+    opacity: 1;
 }
 
-.vertical-video video {
-    width: 100%;
-    height: 100%;
 
-    object-fit: cover;
+/* =========================================================
+   MACHINE TEXT
+========================================================= */
 
-    display: block;
+.machine-text {
+    width: min(1000px, 90vw);
+
+    margin: 170px auto;
+
+    text-align: center;
+
+    opacity: 0;
+    transform: translateY(60px);
+
+    transition:
+        opacity 0.9s ease,
+        transform 1s cubic-bezier(.16,1,.3,1);
 }
 
-.vertical-number {
-    position: absolute;
+.machine-text.active {
+    opacity: 1;
+    transform: translateY(0);
+}
 
-    right: -55px;
-    top: 50%;
+.machine-small {
+    font-size: 11px;
 
-    transform: rotate(90deg);
-
-    font-size: 9px;
     letter-spacing: 5px;
 
     color: rgba(255,255,255,0.4);
 
-    white-space: nowrap;
+    margin-bottom: 20px;
 }
 
-/* =========================================================
-   EXPERIENCIA
-========================================================= */
-
-.experience {
-    min-height: 90vh;
-
-    display: flex;
-    flex-direction: column;
-
-    justify-content: center;
-    align-items: center;
-
-    text-align: center;
-
-    position: relative;
-
-    padding: 10vh 20px;
-}
-
-.experience-label {
-    font-size: 10px;
-    letter-spacing: 6px;
-
-    color: rgba(255,255,255,0.45);
-
-    margin-bottom: 25px;
-}
-
-.experience h3 {
-    font-size: clamp(38px, 6vw, 80px);
+.machine-big {
+    font-size: clamp(50px, 9vw, 130px);
 
     font-weight: 900;
 
-    letter-spacing: -3px;
+    letter-spacing: -6px;
 
-    margin-bottom: 25px;
+    line-height: 0.85;
 }
 
-.experience p {
-    max-width: 600px;
-
-    font-size: 14px;
-
-    line-height: 1.8;
-
-    color: rgba(255,255,255,0.55);
-}
-
-.experience-line {
-    width: 1px;
-    height: 120px;
-
-    margin-top: 45px;
-
-    background:
-        linear-gradient(
-            to bottom,
-            transparent,
-            white,
-            transparent
-        );
-}
 
 /* =========================================================
    YOUTUBE
 ========================================================= */
 
-.youtube-scene {
-    min-height: 150vh;
+.youtube-wrap {
+    width: min(1100px, 92vw);
 
-    position: relative;
+    margin: 0 auto;
 
-    display: flex;
-    flex-direction: column;
+    opacity: 0;
 
-    align-items: center;
+    transform: translateY(80px);
 
-    justify-content: center;
+    transition:
+        opacity 1s ease,
+        transform 1.1s cubic-bezier(.16,1,.3,1);
+}
 
-    padding-bottom: 30vh;
+.youtube-wrap.active {
+    opacity: 1;
+
+    transform: translateY(0);
 }
 
 .youtube-title {
-    text-align: center;
+    margin-bottom: 25px;
 
-    margin-bottom: 50px;
+    font-size: 12px;
 
-    opacity: 0;
-
-    transform: translate3d(0, 50px, 0);
-
-    will-change: transform, opacity;
-}
-
-.youtube-title small {
-    display: block;
-
-    font-size: 10px;
-    letter-spacing: 6px;
+    letter-spacing: 4px;
 
     color: rgba(255,255,255,0.45);
 
-    margin-bottom: 15px;
+    text-align: center;
 }
 
-.youtube-title h3 {
-    font-size: clamp(35px, 6vw, 80px);
-
-    font-weight: 900;
-
-    letter-spacing: -3px;
-}
-
-.youtube-wrapper {
+.youtube-frame {
     position: relative;
 
-    width: min(1100px, 88vw);
+    width: 100%;
 
     aspect-ratio: 16 / 9;
 
-    opacity: 0;
-
-    transform:
-        translate3d(0, 100px, 0)
-        scale(0.65);
-
-    will-change: transform, opacity;
-
-    border: 1px solid rgba(255,255,255,0.18);
-
-    box-shadow:
-        0 50px 120px rgba(0,0,0,0.9),
-        0 0 70px rgba(255,255,255,0.04);
+    background: #000;
 
     overflow: hidden;
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,0.7);
 }
 
-.youtube-wrapper iframe {
+.youtube-frame iframe {
     width: 100%;
     height: 100%;
 
-    border: none;
-
-    display: block;
+    border: 0;
 }
 
+
 /* =========================================================
-   FINAL
+   SCREENSAVER
 ========================================================= */
 
-.next-text {
-    min-height: 40vh;
+#screensaver {
+    position: fixed;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    inset: 0;
 
-    font-size: 10px;
+    z-index: 9999;
 
-    letter-spacing: 7px;
+    background: #999;
 
-    color: rgba(255,255,255,0.25);
+    cursor: none;
+
+    overflow: hidden;
+
+    transition:
+        opacity 0.8s ease,
+        visibility 0.8s ease;
 }
 
-/* =========================================================
-   SALVAPANTALLAS
-========================================================= */
+#screensaver.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+
+/* niebla */
 
 #niebla {
-    position: fixed;
+    position: absolute;
 
     inset: 0;
 
     width: 100%;
     height: 100%;
 
-    z-index: 9999;
-
-    pointer-events: auto;
-
-    background: transparent;
+    display: block;
 }
 
-.logo-secundario {
-    position: fixed;
 
-    top: 50%;
+/* =========================================================
+   LOGO SECUNDARIO
+========================================================= */
+
+.screensaver-logo {
+    position: absolute;
+
     left: 50%;
+    top: 50%;
+
+    width: min(330px, 45vw);
 
     transform: translate(-50%, -50%);
 
-    width: min(330px, 55vw);
-
-    z-index: 10000;
+    z-index: 2;
 
     pointer-events: none;
 
+    user-select: none;
+
     filter:
-        drop-shadow(0 15px 30px rgba(0,0,0,0.5));
-
-    transition:
-        opacity 0.8s ease,
-        transform 0.8s ease;
+        drop-shadow(0 15px 30px rgba(0,0,0,0.35));
 }
 
-.ocultar {
-    opacity: 0 !important;
+.screensaver-hint {
+    position: absolute;
 
-    transform:
-        translate(-50%, -50%)
-        scale(1.08) !important;
+    bottom: 45px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 3;
+
+    font-size: 10px;
+
+    letter-spacing: 4px;
+
+    color: rgba(255,255,255,0.45);
+
+    pointer-events: none;
+
+    white-space: nowrap;
 }
+
 
 /* =========================================================
-   MÓVIL
+   MOBILE
 ========================================================= */
 
 @media (max-width: 700px) {
 
-    .logo-principal {
-        width: 82vw;
+    .hero {
+        min-height: 90vh;
     }
 
-    .subtitulo {
+    .hero-subtitle {
         font-size: 9px;
-        letter-spacing: 4px;
+        letter-spacing: 3px;
     }
 
-    .highlights-title h2 {
-        letter-spacing: -4px;
+    .highlights {
+        padding-top: 100px;
     }
 
-    .highlight-info {
-        left: 6vw;
-        top: 38vh;
+    .section-description {
+        margin-bottom: 90px;
     }
 
-    .tech-line {
-        right: 6vw;
-        width: 100px;
+    .highlight {
+        min-height: 1450px;
     }
 
-    .project-name h3 {
-        font-size: 48px;
+    .machine-text {
+        margin: 120px auto;
     }
 
-    .vertical-video {
-        width: min(330px, 76vw);
+    .screensaver-logo {
+        width: 55vw;
     }
 
-    .vertical-number {
-        display: none;
-    }
+    .screensaver-hint {
+        bottom: 30px;
 
-    .experience p {
-        font-size: 13px;
-    }
+        font-size: 8px;
 
-    .youtube-wrapper {
-        width: 94vw;
+        letter-spacing: 3px;
     }
 }
 </style>
 </head>
 
+
 <body>
+
+
+<!-- =======================================================
+     WEB PRINCIPAL
+======================================================== -->
 
 <main class="pagina">
 
-    <!-- PORTADA -->
+
+    <!-- HERO -->
 
     <section class="hero">
 
         <img
             src="logo-principal.png"
+            class="hero-logo"
             alt="JOS3"
-            class="logo-principal"
         >
 
-        <div class="linea"></div>
+        <div class="hero-line"></div>
 
-        <div class="subtitulo">
+        <div class="hero-subtitle">
             AUTOMOTIVE · PHOTOGRAPHY · LIFESTYLE
         </div>
 
     </section>
 
 
-    <!-- =================================================
-         HIGHLIGHTS
-    ================================================= -->
 
-    <section class="highlights" id="highlights">
+    <!-- HIGHLIGHTS -->
 
-        <div class="highlights-title">
+    <section class="highlights">
 
-            <h2 id="highlightsTitle">
-                HIGHLIGHTS
-            </h2>
+        <h2 class="section-title">
+            HIGHLIGHTS
+        </h2>
 
-        </div>
+        <p class="section-description">
+            Máquinas, experiencias y momentos que merecen ser recordados.
+            Cada proyecto tiene su propia historia.
+        </p>
 
 
-        <div class="highlight-info">
 
-            <div>
-                PROJECT <span>01</span>
+        <!-- FA 470CC -->
+
+        <article class="highlight">
+
+            <div class="highlight-info">
+
+                <div class="highlight-number">
+                    01 / MACHINE
+                </div>
+
+                <h3 class="highlight-title">
+                    FA 470CC
+                </h3>
+
+                <div class="highlight-subtitle">
+                    PROBANDO UNA MÁQUINA DIFERENTE
+                </div>
+
             </div>
 
-            <div>
-                CATEGORY <span>AUTOMOTIVE</span>
-            </div>
-
-            <div>
-                MACHINE <span>FA 470CC</span>
-            </div>
-
-        </div>
 
 
-        <div class="tech-line"></div>
+            <!-- VIDEO VERTICAL -->
 
-
-        <div
-            class="project-name"
-            id="projectName"
-        >
-
-            <div class="project-small">
-                HIGHLIGHT / 01
-            </div>
-
-            <h3>
-                FA 470CC
-            </h3>
-
-        </div>
-
-
-        <!-- VÍDEO VERTICAL -->
-
-        <div
-            class="vertical-scene"
-            id="verticalScene"
-        >
-
-            <div
-                class="vertical-video"
-                id="verticalVideo"
-            >
+            <div class="vertical-video-wrap">
 
                 <video
+                    id="faVideo"
+                    class="vertical-video"
                     src="fa470-vertical.mp4"
                     muted
                     loop
@@ -671,156 +596,171 @@ body {
                     preload="metadata"
                 ></video>
 
-                <div class="vertical-number">
-                    JOS3 / AUTOMOTIVE / 01
+            </div>
+
+
+
+            <!-- TEXTO -->
+
+            <div
+                id="machineText"
+                class="machine-text"
+            >
+
+                <div class="machine-small">
+                    THE MACHINE
+                </div>
+
+                <div class="machine-big">
+                    FA 470CC
                 </div>
 
             </div>
 
-        </div>
 
 
-        <!-- EXPERIENCIA -->
-
-        <section
-            class="experience"
-            id="experience"
-        >
-
-            <div class="experience-label">
-                THE MACHINE
-            </div>
-
-            <h3>
-                FA 470CC
-            </h3>
-
-            <p>
-                Una pequeña mirada a una de las máquinas
-                que he tenido la oportunidad de probar.
-                El vídeo completo continúa en el siguiente
-                capítulo.
-            </p>
-
-            <div class="experience-line"></div>
-
-        </section>
-
-
-        <!-- YOUTUBE -->
-
-        <section
-            class="youtube-scene"
-            id="youtubeScene"
-        >
+            <!-- YOUTUBE -->
 
             <div
-                class="youtube-title"
-                id="youtubeTitle"
+                id="youtubeBlock"
+                class="youtube-wrap"
             >
 
-                <small>
+                <div class="youtube-title">
                     FULL VIDEO
-                </small>
+                </div>
 
-                <h3>
-                    PROBANDO FA 470CC
-                </h3>
+                <div class="youtube-frame">
 
-            </div>
+                    <iframe
+                        src="https://www.youtube.com/embed/sMszBMthOQI?rel=0&modestbranding=1"
+                        title="PROBANDO FA 470CC"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen
+                    ></iframe>
 
-
-            <div
-                class="youtube-wrapper"
-                id="youtubeWrapper"
-            >
-
-                <iframe
-                    src="https://www.youtube.com/embed/sMszBMthOQI?rel=0&modestbranding=1"
-                    title="Probando FA 470cc"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen>
-                </iframe>
+                </div>
 
             </div>
 
-        </section>
-
-
-        <div class="next-text">
-            JOS3 / HIGHLIGHTS
-        </div>
+        </article>
 
     </section>
 
 </main>
 
 
-<!-- =====================================================
-     SALVAPANTALLAS
-===================================================== -->
 
-<canvas id="niebla"></canvas>
+<!-- =======================================================
+     SCREENSAVER
+======================================================== -->
 
-<img
-    src="logo-secundario.png"
-    alt="JOS3"
-    class="logo-secundario"
-    id="logoSecundario"
->
+<div id="screensaver">
+
+    <canvas id="niebla"></canvas>
+
+    <img
+        src="logo-secundario.png"
+        class="screensaver-logo"
+        alt="J3"
+    >
+
+    <div class="screensaver-hint">
+        MOVE TO EXPLORE · CLICK TO ENTER
+    </div>
+
+</div>
+
 
 
 <script>
 
 /* =========================================================
-   RECARGA SIEMPRE DESDE ARRIBA
+   RECARGA SIEMPRE ARRIBA
 ========================================================= */
 
-if ("scrollRestoration" in history) {
-    history.scrollRestoration = "manual";
-}
+history.scrollRestoration = "manual";
 
-window.addEventListener("load", function () {
+window.addEventListener("load", () => {
     window.scrollTo(0, 0);
 });
 
-window.addEventListener("pageshow", function () {
+window.addEventListener("pageshow", () => {
     window.scrollTo(0, 0);
 });
 
 
 /* =========================================================
-   SALVAPANTALLAS
-   ESTELA SUAVE
+   SCREENSAVER — TRAZO CONTINUO
 ========================================================= */
 
-const canvas =
-    document.getElementById("niebla");
+const screensaver = document.getElementById("screensaver");
+const canvas = document.getElementById("niebla");
 
-const ctx =
-    canvas.getContext("2d");
+const ctx = canvas.getContext("2d", {
+    alpha: true
+});
 
-let brushMarks = [];
+let width = 0;
+let height = 0;
+let dpr = 1;
+
+
+/*
+    En vez de crear óvalos individuales:
+
+    ANTES:
+    punto + punto + punto + punto
+
+    AHORA:
+    un único recorrido continuo.
+
+    Esto evita que el ojo pueda detectar las formas
+    individuales que construyen la estela.
+*/
+
+const points = [];
+
+let mouseX = -1000;
+let mouseY = -1000;
+
+let previousX = -1000;
+let previousY = -1000;
+
+let lastMoveTime = 0;
+
+let animationFrame = null;
+
+
+/* =========================================================
+   CONFIGURACIÓN DE LA ESTELA
+========================================================= */
+
+const TRAIL_LIFE = 760;
+
+const MIN_DISTANCE = 3;
+
+const BASE_WIDTH = 115;
+
+const MAX_POINTS = 90;
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
 
 function resizeCanvas() {
 
-    const dpr =
-        Math.min(
-            window.devicePixelRatio || 1,
-            1.5
-        );
+    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
-    canvas.width =
-        window.innerWidth * dpr;
+    width = window.innerWidth;
+    height = window.innerHeight;
 
-    canvas.height =
-        window.innerHeight * dpr;
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
 
-    canvas.style.width =
-        window.innerWidth + "px";
-
-    canvas.style.height =
-        window.innerHeight + "px";
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
 
     ctx.setTransform(
         dpr,
@@ -830,33 +770,424 @@ function resizeCanvas() {
         0,
         0
     );
-
-    drawFog();
 }
 
 window.addEventListener(
     "resize",
-    resizeCanvas
+    resizeCanvas,
+    { passive: true }
+);
+
+resizeCanvas();
+
+
+/* =========================================================
+   MOVIMIENTO DEL RATÓN
+========================================================= */
+
+window.addEventListener(
+    "mousemove",
+    (event) => {
+
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+
+        const now = performance.now();
+
+        /*
+            Si acabamos de aparecer o hemos estado quietos,
+            empezamos un trazo nuevo.
+        */
+
+        if (
+            previousX < 0 ||
+            previousY < 0 ||
+            now - lastMoveTime > TRAIL_LIFE
+        ) {
+
+            points.length = 0;
+
+            previousX = mouseX;
+            previousY = mouseY;
+
+            lastMoveTime = now;
+
+            return;
+        }
+
+
+        const dx = mouseX - previousX;
+        const dy = mouseY - previousY;
+
+        const distance = Math.sqrt(
+            dx * dx + dy * dy
+        );
+
+
+        if (distance < MIN_DISTANCE) {
+            return;
+        }
+
+
+        /*
+            Interpolamos los puntos.
+
+            Esto hace que incluso si el ratón se mueve
+            muy rápido, el recorrido siga siendo continuo.
+        */
+
+        const steps = Math.max(
+            1,
+            Math.ceil(distance / 8)
+        );
+
+
+        for (let i = 1; i <= steps; i++) {
+
+            const t = i / steps;
+
+            const x =
+                previousX +
+                dx * t;
+
+            const y =
+                previousY +
+                dy * t;
+
+
+            points.push({
+                x,
+                y,
+                time: now
+            });
+        }
+
+
+        /*
+            Limitar memoria.
+        */
+
+        if (points.length > MAX_POINTS) {
+
+            points.splice(
+                0,
+                points.length - MAX_POINTS
+            );
+        }
+
+
+        previousX = mouseX;
+        previousY = mouseY;
+
+        lastMoveTime = now;
+    },
+    { passive: true }
 );
 
 
-function drawFog() {
+/* =========================================================
+   CURSOR FUERA DE LA PANTALLA
+========================================================= */
+
+window.addEventListener(
+    "mouseout",
+    (event) => {
+
+        if (!event.relatedTarget) {
+
+            mouseX = -1000;
+            mouseY = -1000;
+
+            previousX = -1000;
+            previousY = -1000;
+        }
+    },
+    { passive: true }
+);
+
+
+/* =========================================================
+   SUAVIZADO DE PUNTOS
+========================================================= */
+
+function smoothPath(path) {
+
+    if (path.length < 2) {
+        return;
+    }
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        path[0].x,
+        path[0].y
+    );
+
+
+    for (let i = 1; i < path.length - 1; i++) {
+
+        const current = path[i];
+
+        const next = path[i + 1];
+
+        const middleX =
+            (current.x + next.x) / 2;
+
+        const middleY =
+            (current.y + next.y) / 2;
+
+
+        ctx.quadraticCurveTo(
+            current.x,
+            current.y,
+            middleX,
+            middleY
+        );
+    }
+
+
+    const last =
+        path[path.length - 1];
+
+    const previous =
+        path[path.length - 2];
+
+
+    ctx.quadraticCurveTo(
+        previous.x,
+        previous.y,
+        last.x,
+        last.y
+    );
+}
+
+
+/* =========================================================
+   DIBUJAR ESTELA
+========================================================= */
+
+function drawTrail(now) {
+
+    /*
+        Eliminar puntos demasiado antiguos.
+    */
+
+    while (
+        points.length &&
+        now - points[0].time > TRAIL_LIFE
+    ) {
+
+        points.shift();
+    }
+
+
+    /*
+        Limpiar completamente.
+    */
+
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    if (points.length < 2) {
+        return;
+    }
+
+
+    /*
+        Construimos una copia temporal con
+        solamente los puntos todavía vivos.
+    */
+
+    const alive = [];
+
+
+    for (const point of points) {
+
+        const age =
+            now - point.time;
+
+        if (age < TRAIL_LIFE) {
+
+            alive.push(point);
+        }
+    }
+
+
+    if (alive.length < 2) {
+        return;
+    }
+
+
+    /*
+        -----------------------------------------------------
+        CAPA PRINCIPAL
+        -----------------------------------------------------
+
+        Una única línea gruesa y continua.
+        Nada de círculos ni stamps.
+    */
+
+    ctx.save();
 
     ctx.globalCompositeOperation =
-        "source-over";
+        "destination-out";
+
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    /*
+        Desenfoque suficientemente grande para que
+        el borde no revele la geometría interna.
+    */
+
+    ctx.filter = "blur(24px)";
+
+    ctx.globalAlpha = 0.95;
+
+    ctx.lineWidth = BASE_WIDTH;
+
+    smoothPath(alive);
+
+    ctx.stroke();
+
+    ctx.restore();
+
+
+    /*
+        -----------------------------------------------------
+        SEGUNDA CAPA
+        -----------------------------------------------------
+
+        Una pasada más ancha y suave.
+        Sirve para que la estela tenga un aspecto
+        de pincel y no de "línea digital".
+    */
+
+    ctx.save();
+
+    ctx.globalCompositeOperation =
+        "destination-out";
+
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.filter = "blur(45px)";
+
+    ctx.globalAlpha = 0.48;
+
+    ctx.lineWidth = BASE_WIDTH * 1.45;
+
+    smoothPath(alive);
+
+    ctx.stroke();
+
+    ctx.restore();
+
+
+    /*
+        -----------------------------------------------------
+        FADE TEMPORAL
+        -----------------------------------------------------
+
+        La parte antigua desaparece progresivamente.
+        No hay cortes bruscos.
+    */
+
+    ctx.save();
+
+    ctx.globalCompositeOperation =
+        "destination-out";
+
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.filter = "blur(18px)";
+
+    const oldest =
+        alive[0].time;
+
+    const newest =
+        alive[alive.length - 1].time;
+
+    const lifetime =
+        Math.max(1, newest - oldest);
+
+
+    /*
+        Dibujamos segmentos de forma continua
+        pero sin crear "marcas" visibles.
+    */
+
+    ctx.lineWidth =
+        BASE_WIDTH * 0.72;
+
+
+    for (
+        let i = 1;
+        i < alive.length;
+        i++
+    ) {
+
+        const p1 = alive[i - 1];
+        const p2 = alive[i];
+
+        const age =
+            now - p1.time;
+
+        const fade =
+            Math.max(
+                0,
+                1 - age / TRAIL_LIFE
+            );
+
+
+        ctx.globalAlpha =
+            fade * 0.18;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            p1.x,
+            p1.y
+        );
+
+        ctx.lineTo(
+            p2.x,
+            p2.y
+        );
+
+        ctx.stroke();
+    }
+
+    ctx.restore();
+}
+
+
+/* =========================================================
+   NIEBLA
+========================================================= */
+
+function drawFog() {
+
+    /*
+        Fondo gris continuo.
+    */
 
     const gradient =
-        ctx.createRadialGradient(
-            window.innerWidth / 2,
-            window.innerHeight / 2,
+        ctx.createLinearGradient(
             0,
-            window.innerWidth / 2,
-            window.innerHeight / 2,
-            Math.max(
-                window.innerWidth,
-                window.innerHeight
-            )
+            0,
+            0,
+            height
         );
+
 
     gradient.addColorStop(
         0,
@@ -865,216 +1196,281 @@ function drawFog() {
 
     gradient.addColorStop(
         0.5,
-        "#969696"
+        "#9a9a9a"
     );
 
     gradient.addColorStop(
         1,
-        "#707070"
+        "#777777"
     );
 
-    ctx.fillStyle =
-        gradient;
+
+    ctx.globalCompositeOperation =
+        "source-over";
+
+    ctx.globalAlpha = 1;
+
+    ctx.filter = "none";
+
+    ctx.fillStyle = gradient;
 
     ctx.fillRect(
         0,
         0,
-        window.innerWidth,
-        window.innerHeight
+        width,
+        height
     );
 }
 
 
-/*
-    En vez de dibujar muchos óvalos
-    independientes, cada marca tiene
-    una dirección y una longitud.
-*/
+/* =========================================================
+   LOOP DEL SCREENSAVER
+========================================================= */
 
-function addBrushMark(
-    x,
-    y,
-    angle,
-    speed
-) {
-
-    const length =
-        Math.min(
-            170,
-            Math.max(
-                65,
-                75 + speed * 3
-            )
-        );
-
-    const width =
-        Math.min(
-            42,
-            Math.max(
-                18,
-                24 + speed * 0.3
-            )
-        );
-
-    brushMarks.push({
-
-        x,
-        y,
-
-        angle,
-
-        length,
-
-        width,
-
-        created:
-            performance.now(),
-
-        life:
-            0,
-
-        duration:
-            650 +
-            Math.random() * 180
-
-    });
+function renderScreensaver(now) {
 
     /*
-       Evita que una acumulación enorme
-       de marcas pueda afectar a la fluidez.
+        Primero ponemos la niebla.
     */
 
-    if (brushMarks.length > 160) {
+    drawFog();
 
-        brushMarks.splice(
-            0,
-            brushMarks.length - 160
+
+    /*
+        Después quitamos de la niebla
+        el trazo continuo.
+    */
+
+    drawTrail(now);
+
+
+    animationFrame =
+        requestAnimationFrame(
+            renderScreensaver
         );
-    }
 }
 
 
-let lastMouseX = null;
-let lastMouseY = null;
-let lastMouseTime =
-    performance.now();
+animationFrame =
+    requestAnimationFrame(
+        renderScreensaver
+    );
 
 
-window.addEventListener(
-    "mousemove",
-    function(e) {
+/* =========================================================
+   ENTRAR EN LA WEB
+========================================================= */
 
-        const now =
-            performance.now();
+screensaver.addEventListener(
+    "click",
+    () => {
 
-        if (
-            lastMouseX !== null &&
-            lastMouseY !== null
-        ) {
+        screensaver.classList.add(
+            "hidden"
+        );
 
-            const dx =
-                e.clientX -
-                lastMouseX;
+        /*
+            Paramos completamente el canvas
+            cuando ya no es necesario.
 
-            const dy =
-                e.clientY -
-                lastMouseY;
+            Esto evita gastar CPU durante
+            toda la navegación de la web.
+        */
 
-            const distance =
-                Math.sqrt(
-                    dx * dx +
-                    dy * dy
-                );
+        if (animationFrame) {
 
-            const dt =
-                Math.max(
-                    now -
-                    lastMouseTime,
-                    1
-                );
+            cancelAnimationFrame(
+                animationFrame
+            );
 
-            const speed =
-                distance /
-                dt *
-                16;
-
-
-            if (distance > 2) {
-
-                const angle =
-                    Math.atan2(
-                        dy,
-                        dx
-                    );
-
-                /*
-                   Interpolamos el recorrido
-                   para crear una estela continua.
-                */
-
-                const steps =
-                    Math.max(
-                        1,
-                        Math.ceil(
-                            distance / 22
-                        )
-                    );
-
-                for (
-                    let i = 0;
-                    i < steps;
-                    i++
-                ) {
-
-                    const t =
-                        i / steps;
-
-                    const px =
-                        lastMouseX +
-                        dx * t;
-
-                    const py =
-                        lastMouseY +
-                        dy * t;
-
-                    /*
-                       Pequeña variación lateral,
-                       pero mucho más controlada.
-                    */
-
-                    const offset =
-                        (
-                            Math.random() -
-                            0.5
-                        ) * 10;
-
-                    const perpX =
-                        -Math.sin(angle) *
-                        offset;
-
-                    const perpY =
-                        Math.cos(angle) *
-                        offset;
-
-                    addBrushMark(
-                        px + perpX,
-                        py + perpY,
-                        angle,
-                        speed
-                    );
-                }
-            }
+            animationFrame = null;
         }
 
-        lastMouseX =
-            e.clientX;
+        canvas.style.display = "none";
 
-        lastMouseY =
-            e.clientY;
+        document.body.style.cursor = "auto";
+    }
+);
 
-        lastMouseTime =
-            now;
 
+/* =========================================================
+   HIGHLIGHTS — ANIMACIONES
+========================================================= */
+
+const faVideo =
+    document.getElementById("faVideo");
+
+const machineText =
+    document.getElementById("machineText");
+
+const youtubeBlock =
+    document.getElementById("youtubeBlock");
+
+
+let highlightTicking = false;
+
+
+/* =========================================================
+   SCROLL HIGHLIGHTS
+========================================================= */
+
+function updateHighlights() {
+
+    const viewportCenter =
+        window.innerHeight / 2;
+
+
+    /*
+        -----------------------------------------------------
+        VIDEO VERTICAL
+        -----------------------------------------------------
+    */
+
+    const videoRect =
+        faVideo.getBoundingClientRect();
+
+
+    const videoCenter =
+        videoRect.top +
+        videoRect.height / 2;
+
+
+    const distance =
+        Math.abs(
+            videoCenter -
+            viewportCenter
+        );
+
+
+    /*
+        Solo se activa cuando está realmente
+        cerca del centro.
+    */
+
+    const videoIsCentered =
+        distance <
+        window.innerHeight * 0.24;
+
+
+    if (videoIsCentered) {
+
+        faVideo.classList.add(
+            "active"
+        );
+
+
+        if (faVideo.paused) {
+
+            faVideo.play().catch(() => {});
+        }
+
+    } else {
+
+        faVideo.classList.remove(
+            "active"
+        );
+
+
+        if (!faVideo.paused) {
+
+            faVideo.pause();
+        }
+    }
+
+
+    /*
+        -----------------------------------------------------
+        TEXTO
+        -----------------------------------------------------
+    */
+
+    const textRect =
+        machineText.getBoundingClientRect();
+
+
+    const textCenter =
+        textRect.top +
+        textRect.height / 2;
+
+
+    const textVisible =
+        Math.abs(
+            textCenter -
+            viewportCenter
+        ) <
+        window.innerHeight * 0.45;
+
+
+    if (textVisible) {
+
+        machineText.classList.add(
+            "active"
+        );
+
+    } else {
+
+        machineText.classList.remove(
+            "active"
+        );
+    }
+
+
+    /*
+        -----------------------------------------------------
+        YOUTUBE
+        -----------------------------------------------------
+    */
+
+    const youtubeRect =
+        youtubeBlock.getBoundingClientRect();
+
+
+    const youtubeCenter =
+        youtubeRect.top +
+        youtubeRect.height / 2;
+
+
+    const youtubeVisible =
+        youtubeCenter <
+        window.innerHeight * 1.1 &&
+        youtubeCenter >
+        -window.innerHeight * 0.2;
+
+
+    if (youtubeVisible) {
+
+        youtubeBlock.classList.add(
+            "active"
+        );
+
+    } else {
+
+        youtubeBlock.classList.remove(
+            "active"
+        );
+    }
+
+
+    highlightTicking = false;
+}
+
+
+/* =========================================================
+   SCROLL OPTIMIZADO
+========================================================= */
+
+window.addEventListener(
+    "scroll",
+    () => {
+
+        if (!highlightTicking) {
+
+            highlightTicking = true;
+
+            requestAnimationFrame(
+                updateHighlights
+            );
+        }
     },
     {
         passive: true
@@ -1082,552 +1478,29 @@ window.addEventListener(
 );
 
 
-/*
-   Dibuja cada estela como una forma
-   alargada y difuminada siguiendo
-   el movimiento del ratón.
-*/
+/* =========================================================
+   PRIMERA ACTUALIZACIÓN
+========================================================= */
 
-function drawBrushMark(mark) {
+updateHighlights();
 
-    const now =
-        performance.now();
 
-    const age =
-        now -
-        mark.created;
+/* =========================================================
+   LIMPIEZA AL CERRAR
+========================================================= */
 
-    const progress =
-        Math.min(
-            age /
-            mark.duration,
-            1
-        );
+window.addEventListener(
+    "beforeunload",
+    () => {
 
-    if (progress >= 1) {
-        return false;
-    }
+        if (animationFrame) {
 
-    /*
-       Fade muy suave:
-       aparece rápido y desaparece
-       progresivamente.
-    */
-
-    let opacity;
-
-    if (progress < 0.18) {
-
-        opacity =
-            progress / 0.18;
-
-    } else {
-
-        opacity =
-            1 -
-            (
-                (progress - 0.18) /
-                0.82
+            cancelAnimationFrame(
+                animationFrame
             );
-    }
-
-    opacity =
-        Math.max(
-            0,
-            Math.min(
-                1,
-                opacity
-            )
-        );
-
-
-    ctx.save();
-
-    ctx.translate(
-        mark.x,
-        mark.y
-    );
-
-    ctx.rotate(
-        mark.angle
-    );
-
-    ctx.globalAlpha =
-        opacity * 0.8;
-
-    /*
-       Gradiente longitudinal.
-    */
-
-    const gradient =
-        ctx.createLinearGradient(
-            -mark.length,
-            0,
-            mark.length,
-            0
-        );
-
-    gradient.addColorStop(
-        0,
-        "rgba(0,0,0,0)"
-    );
-
-    gradient.addColorStop(
-        0.2,
-        "rgba(0,0,0,0.8)"
-    );
-
-    gradient.addColorStop(
-        0.5,
-        "rgba(0,0,0,1)"
-    );
-
-    gradient.addColorStop(
-        0.8,
-        "rgba(0,0,0,0.8)"
-    );
-
-    gradient.addColorStop(
-        1,
-        "rgba(0,0,0,0)"
-    );
-
-    ctx.fillStyle =
-        gradient;
-
-
-    /*
-       Forma suave tipo pincel.
-    */
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        -mark.length,
-        0
-    );
-
-    ctx.quadraticCurveTo(
-        -mark.length * 0.55,
-        -mark.width,
-        0,
-        -mark.width * 0.65
-    );
-
-    ctx.quadraticCurveTo(
-        mark.length * 0.55,
-        -mark.width,
-        mark.length,
-        0
-    );
-
-    ctx.quadraticCurveTo(
-        mark.length * 0.55,
-        mark.width,
-        0,
-        mark.width * 0.65
-    );
-
-    ctx.quadraticCurveTo(
-        -mark.length * 0.55,
-        mark.width,
-        -mark.length,
-        0
-    );
-
-    ctx.closePath();
-
-    ctx.fill();
-
-    ctx.restore();
-
-    return true;
-}
-
-
-function animateFog() {
-
-    drawFog();
-
-    ctx.globalCompositeOperation =
-        "destination-out";
-
-    brushMarks =
-        brushMarks.filter(
-            drawBrushMark
-        );
-
-    requestAnimationFrame(
-        animateFog
-    );
-}
-
-
-resizeCanvas();
-
-requestAnimationFrame(
-    animateFog
-);
-
-
-/* =========================================================
-   SALIR DEL SALVAPANTALLAS
-========================================================= */
-
-const logoSecundario =
-    document.getElementById(
-        "logoSecundario"
-    );
-
-
-canvas.addEventListener(
-    "click",
-    function() {
-
-        canvas.style.transition =
-            "opacity 1s ease";
-
-        canvas.style.opacity =
-            "0";
-
-        logoSecundario.classList.add(
-            "ocultar"
-        );
-
-        setTimeout(
-            function() {
-
-                canvas.style.display =
-                    "none";
-
-                logoSecundario.style.display =
-                    "none";
-
-            },
-            1000
-        );
-
-    }
-);
-
-
-/* =========================================================
-   ANIMACIONES DEL SCROLL
-========================================================= */
-
-const highlightsTitle =
-    document.getElementById(
-        "highlightsTitle"
-    );
-
-const projectName =
-    document.getElementById(
-        "projectName"
-    );
-
-const verticalScene =
-    document.getElementById(
-        "verticalScene"
-    );
-
-const verticalVideo =
-    document.getElementById(
-        "verticalVideo"
-    );
-
-const verticalVideoElement =
-    verticalVideo.querySelector(
-        "video"
-    );
-
-const youtubeScene =
-    document.getElementById(
-        "youtubeScene"
-    );
-
-const youtubeTitle =
-    document.getElementById(
-        "youtubeTitle"
-    );
-
-const youtubeWrapper =
-    document.getElementById(
-        "youtubeWrapper"
-    );
-
-
-let scrollTicking =
-    false;
-
-
-function clamp(
-    value,
-    min,
-    max
-) {
-
-    return Math.max(
-        min,
-        Math.min(
-            max,
-            value
-        )
-    );
-}
-
-
-function updateScroll() {
-
-    scrollTicking =
-        false;
-
-    const windowHeight =
-        window.innerHeight;
-
-
-    /* =====================================================
-       HIGHLIGHTS
-    ===================================================== */
-
-    const titleRect =
-        highlightsTitle.getBoundingClientRect();
-
-    const titleProgress =
-        clamp(
-            -titleRect.top /
-            (windowHeight * 0.8),
-            0,
-            1
-        );
-
-    highlightsTitle.style.transform =
-        `translate3d(
-            0,
-            ${titleProgress * -120}px,
-            0
-        )`;
-
-    highlightsTitle.style.opacity =
-        1 -
-        titleProgress * 0.75;
-
-
-    /* =====================================================
-       FA 470CC
-    ===================================================== */
-
-    const nameRect =
-        projectName.getBoundingClientRect();
-
-    const nameProgress =
-        clamp(
-            (
-                windowHeight * 0.9 -
-                nameRect.top
-            ) /
-            (windowHeight * 0.6),
-            0,
-            1
-        );
-
-    projectName.style.opacity =
-        nameProgress;
-
-    projectName.style.transform =
-        `translate3d(
-            -50%,
-            ${40 - nameProgress * 40}px,
-            0
-        )`;
-
-
-    /* =====================================================
-       VÍDEO VERTICAL
-    ===================================================== */
-
-    const videoRect =
-        verticalScene.getBoundingClientRect();
-
-    const videoProgress =
-        clamp(
-            (
-                windowHeight * 0.95 -
-                videoRect.top
-            ) /
-            (windowHeight * 0.9),
-            0,
-            1
-        );
-
-
-    const scale =
-        0.65 +
-        videoProgress * 0.35;
-
-    const y =
-        180 -
-        videoProgress * 180;
-
-    const rotateX =
-        12 -
-        videoProgress * 12;
-
-    const rotateY =
-        -8 +
-        videoProgress * 8;
-
-
-    verticalVideo.style.opacity =
-        videoProgress;
-
-    verticalVideo.style.transform =
-        `translate3d(
-            0,
-            ${y}px,
-            0
-        )
-        rotateX(${rotateX}deg)
-        rotateY(${rotateY}deg)
-        scale(${scale})`;
-
-
-    /* =====================================================
-       REPRODUCCIÓN DEL VÍDEO
-       SOLO CUANDO ESTÁ CENTRADO
-    ===================================================== */
-
-    const videoCenter =
-        videoRect.top +
-        videoRect.height / 2;
-
-    const screenCenter =
-        windowHeight / 2;
-
-    const distanceFromCenter =
-        Math.abs(
-            videoCenter -
-            screenCenter
-        );
-
-
-    const centerZone =
-        Math.min(
-            180,
-            windowHeight * 0.18
-        );
-
-
-    const isCentered =
-        distanceFromCenter <
-        centerZone;
-
-
-    if (isCentered) {
-
-        if (
-            verticalVideoElement.paused
-        ) {
-
-            verticalVideoElement
-                .play()
-                .catch(() => {});
-        }
-
-    } else {
-
-        if (
-            !verticalVideoElement.paused
-        ) {
-
-            verticalVideoElement.pause();
         }
     }
-
-
-    /* =====================================================
-       YOUTUBE
-    ===================================================== */
-
-    const youtubeRect =
-        youtubeScene.getBoundingClientRect();
-
-    const youtubeProgress =
-        clamp(
-            (
-                windowHeight * 0.9 -
-                youtubeRect.top
-            ) /
-            (windowHeight * 1.2),
-            0,
-            1
-        );
-
-
-    youtubeTitle.style.opacity =
-        youtubeProgress;
-
-    youtubeTitle.style.transform =
-        `translate3d(
-            0,
-            ${50 - youtubeProgress * 50}px,
-            0
-        )`;
-
-
-    const youtubeScale =
-        0.65 +
-        youtubeProgress * 0.35;
-
-    const youtubeY =
-        100 -
-        youtubeProgress * 100;
-
-
-    youtubeWrapper.style.opacity =
-        youtubeProgress;
-
-    youtubeWrapper.style.transform =
-        `translate3d(
-            0,
-            ${youtubeY}px,
-            0
-        )
-        scale(${youtubeScale})`;
-}
-
-
-function requestScrollUpdate() {
-
-    if (!scrollTicking) {
-
-        scrollTicking =
-            true;
-
-        requestAnimationFrame(
-            updateScroll
-        );
-    }
-}
-
-
-window.addEventListener(
-    "scroll",
-    requestScrollUpdate,
-    {
-        passive: true
-    }
 );
-
-window.addEventListener(
-    "resize",
-    requestScrollUpdate,
-    {
-        passive: true
-    }
-);
-
-
-updateScroll();
 
 </script>
 
