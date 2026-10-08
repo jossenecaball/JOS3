@@ -51,8 +51,6 @@ body {
     z-index: 1;
 }
 
-/* textura industrial muy sutil */
-
 .pagina::before {
     content: "";
     position: fixed;
@@ -390,7 +388,14 @@ body {
 
     z-index: 9999;
 
-    background: #999;
+    /*
+        IMPORTANTE:
+        La capa es translúcida.
+        La web queda debajo y el canvas funciona
+        como máscara/revelado.
+    */
+
+    background: rgba(145,145,145,0.94);
 
     cursor: none;
 
@@ -408,7 +413,9 @@ body {
 }
 
 
-/* niebla */
+/* =========================================================
+   CANVAS DE REVELADO
+========================================================= */
 
 #niebla {
     position: absolute;
@@ -419,6 +426,14 @@ body {
     height: 100%;
 
     display: block;
+
+    /*
+        El canvas contiene únicamente la máscara gris.
+        La transparencia se consigue eliminando partes
+        de esta máscara.
+    */
+
+    pointer-events: none;
 }
 
 
@@ -691,35 +706,25 @@ window.addEventListener("pageshow", () => {
 
 
 /* =========================================================
-   SCREENSAVER — TRAZO CONTINUO
+   SCREENSAVER
+   REVELADO CONTINUO Y TRANSPARENTE
 ========================================================= */
 
-const screensaver = document.getElementById("screensaver");
-const canvas = document.getElementById("niebla");
+const screensaver =
+    document.getElementById("screensaver");
 
-const ctx = canvas.getContext("2d", {
-    alpha: true
-});
+const canvas =
+    document.getElementById("niebla");
+
+const ctx =
+    canvas.getContext("2d", {
+        alpha: true
+    });
+
 
 let width = 0;
 let height = 0;
 let dpr = 1;
-
-
-/*
-    En vez de crear óvalos individuales:
-
-    ANTES:
-    punto + punto + punto + punto
-
-    AHORA:
-    un único recorrido continuo.
-
-    Esto evita que el ojo pueda detectar las formas
-    individuales que construyen la estela.
-*/
-
-const points = [];
 
 let mouseX = -1000;
 let mouseY = -1000;
@@ -733,16 +738,30 @@ let animationFrame = null;
 
 
 /* =========================================================
-   CONFIGURACIÓN DE LA ESTELA
+   TRAIL
 ========================================================= */
+
+/*
+    Una sola trayectoria continua.
+
+    No usamos:
+    - óvalos
+    - círculos
+    - stamps
+    - partículas
+
+    El pincel se construye como una curva continua.
+*/
+
+const trail = [];
 
 const TRAIL_LIFE = 760;
 
-const MIN_DISTANCE = 3;
+const MIN_DISTANCE = 2;
 
-const BASE_WIDTH = 115;
+const MAX_POINTS = 120;
 
-const MAX_POINTS = 90;
+const BRUSH_WIDTH = 130;
 
 
 /* =========================================================
@@ -751,16 +770,29 @@ const MAX_POINTS = 90;
 
 function resizeCanvas() {
 
-    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    dpr =
+        Math.min(
+            window.devicePixelRatio || 1,
+            1.5
+        );
 
-    width = window.innerWidth;
-    height = window.innerHeight;
+    width =
+        window.innerWidth;
 
-    canvas.width = Math.floor(width * dpr);
-    canvas.height = Math.floor(height * dpr);
+    height =
+        window.innerHeight;
 
-    canvas.style.width = width + "px";
-    canvas.style.height = height + "px";
+    canvas.width =
+        Math.floor(width * dpr);
+
+    canvas.height =
+        Math.floor(height * dpr);
+
+    canvas.style.width =
+        width + "px";
+
+    canvas.style.height =
+        height + "px";
 
     ctx.setTransform(
         dpr,
@@ -782,21 +814,26 @@ resizeCanvas();
 
 
 /* =========================================================
-   MOVIMIENTO DEL RATÓN
+   RATÓN
 ========================================================= */
 
 window.addEventListener(
     "mousemove",
     (event) => {
 
-        mouseX = event.clientX;
-        mouseY = event.clientY;
+        const x =
+            event.clientX;
 
-        const now = performance.now();
+        const y =
+            event.clientY;
+
+        const now =
+            performance.now();
+
 
         /*
-            Si acabamos de aparecer o hemos estado quietos,
-            empezamos un trazo nuevo.
+            Si hemos estado quietos demasiado tiempo,
+            empezamos una nueva trayectoria.
         */
 
         if (
@@ -805,10 +842,10 @@ window.addEventListener(
             now - lastMoveTime > TRAIL_LIFE
         ) {
 
-            points.length = 0;
+            trail.length = 0;
 
-            previousX = mouseX;
-            previousY = mouseY;
+            previousX = x;
+            previousY = y;
 
             lastMoveTime = now;
 
@@ -816,12 +853,17 @@ window.addEventListener(
         }
 
 
-        const dx = mouseX - previousX;
-        const dy = mouseY - previousY;
+        const dx =
+            x - previousX;
 
-        const distance = Math.sqrt(
-            dx * dx + dy * dy
-        );
+        const dy =
+            y - previousY;
+
+        const distance =
+            Math.sqrt(
+                dx * dx +
+                dy * dy
+            );
 
 
         if (distance < MIN_DISTANCE) {
@@ -830,63 +872,69 @@ window.addEventListener(
 
 
         /*
-            Interpolamos los puntos.
+            Interpolación continua.
 
-            Esto hace que incluso si el ratón se mueve
-            muy rápido, el recorrido siga siendo continuo.
+            Evita huecos cuando el ratón se mueve
+            rápidamente.
         */
 
-        const steps = Math.max(
-            1,
-            Math.ceil(distance / 8)
-        );
+        const steps =
+            Math.max(
+                1,
+                Math.ceil(distance / 6)
+            );
 
 
-        for (let i = 1; i <= steps; i++) {
+        for (
+            let i = 1;
+            i <= steps;
+            i++
+        ) {
 
-            const t = i / steps;
-
-            const x =
-                previousX +
-                dx * t;
-
-            const y =
-                previousY +
-                dy * t;
+            const t =
+                i / steps;
 
 
-            points.push({
-                x,
-                y,
+            trail.push({
+                x:
+                    previousX +
+                    dx * t,
+
+                y:
+                    previousY +
+                    dy * t,
+
                 time: now
             });
         }
 
 
-        /*
-            Limitar memoria.
-        */
+        if (
+            trail.length >
+            MAX_POINTS
+        ) {
 
-        if (points.length > MAX_POINTS) {
-
-            points.splice(
+            trail.splice(
                 0,
-                points.length - MAX_POINTS
+                trail.length -
+                MAX_POINTS
             );
         }
 
 
-        previousX = mouseX;
-        previousY = mouseY;
+        previousX = x;
+        previousY = y;
 
         lastMoveTime = now;
     },
-    { passive: true }
+    {
+        passive: true
+    }
 );
 
 
 /* =========================================================
-   CURSOR FUERA DE LA PANTALLA
+   SALIR DE PANTALLA
 ========================================================= */
 
 window.addEventListener(
@@ -895,63 +943,72 @@ window.addEventListener(
 
         if (!event.relatedTarget) {
 
-            mouseX = -1000;
-            mouseY = -1000;
-
             previousX = -1000;
             previousY = -1000;
         }
     },
-    { passive: true }
+    {
+        passive: true
+    }
 );
 
 
 /* =========================================================
-   SUAVIZADO DE PUNTOS
+   CURVA SUAVE
 ========================================================= */
 
-function smoothPath(path) {
+function buildSmoothPath(points) {
 
-    if (path.length < 2) {
-        return;
+    if (points.length < 2) {
+        return false;
     }
 
 
     ctx.beginPath();
 
+
     ctx.moveTo(
-        path[0].x,
-        path[0].y
+        points[0].x,
+        points[0].y
     );
 
 
-    for (let i = 1; i < path.length - 1; i++) {
+    for (
+        let i = 1;
+        i < points.length - 1;
+        i++
+    ) {
 
-        const current = path[i];
+        const current =
+            points[i];
 
-        const next = path[i + 1];
+        const next =
+            points[i + 1];
 
-        const middleX =
-            (current.x + next.x) / 2;
 
-        const middleY =
-            (current.y + next.y) / 2;
+        const midX =
+            (current.x +
+             next.x) / 2;
+
+        const midY =
+            (current.y +
+             next.y) / 2;
 
 
         ctx.quadraticCurveTo(
             current.x,
             current.y,
-            middleX,
-            middleY
+            midX,
+            midY
         );
     }
 
 
     const last =
-        path[path.length - 1];
+        points[points.length - 1];
 
     const previous =
-        path[path.length - 2];
+        points[points.length - 2];
 
 
     ctx.quadraticCurveTo(
@@ -960,77 +1017,44 @@ function smoothPath(path) {
         last.x,
         last.y
     );
+
+
+    return true;
 }
 
 
 /* =========================================================
-   DIBUJAR ESTELA
+   DIBUJAR TRAZO
 ========================================================= */
 
 function drawTrail(now) {
 
     /*
-        Eliminar puntos demasiado antiguos.
+        Eliminamos puntos caducados.
     */
 
     while (
-        points.length &&
-        now - points[0].time > TRAIL_LIFE
+        trail.length &&
+        now - trail[0].time >
+        TRAIL_LIFE
     ) {
 
-        points.shift();
+        trail.shift();
     }
 
 
-    /*
-        Limpiar completamente.
-    */
-
-    ctx.clearRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-
-    if (points.length < 2) {
-        return;
-    }
-
-
-    /*
-        Construimos una copia temporal con
-        solamente los puntos todavía vivos.
-    */
-
-    const alive = [];
-
-
-    for (const point of points) {
-
-        const age =
-            now - point.time;
-
-        if (age < TRAIL_LIFE) {
-
-            alive.push(point);
-        }
-    }
-
-
-    if (alive.length < 2) {
+    if (trail.length < 2) {
         return;
     }
 
 
     /*
         -----------------------------------------------------
-        CAPA PRINCIPAL
+        TRAZO PRINCIPAL
         -----------------------------------------------------
 
-        Una única línea gruesa y continua.
-        Nada de círculos ni stamps.
+        destination-out elimina la capa gris
+        y deja ver directamente la web inferior.
     */
 
     ctx.save();
@@ -1038,146 +1062,141 @@ function drawTrail(now) {
     ctx.globalCompositeOperation =
         "destination-out";
 
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
+    ctx.lineCap =
+        "round";
 
-    /*
-        Desenfoque suficientemente grande para que
-        el borde no revele la geometría interna.
-    */
+    ctx.lineJoin =
+        "round";
 
-    ctx.filter = "blur(24px)";
+    ctx.filter =
+        "blur(28px)";
 
-    ctx.globalAlpha = 0.95;
-
-    ctx.lineWidth = BASE_WIDTH;
-
-    smoothPath(alive);
-
-    ctx.stroke();
-
-    ctx.restore();
-
-
-    /*
-        -----------------------------------------------------
-        SEGUNDA CAPA
-        -----------------------------------------------------
-
-        Una pasada más ancha y suave.
-        Sirve para que la estela tenga un aspecto
-        de pincel y no de "línea digital".
-    */
-
-    ctx.save();
-
-    ctx.globalCompositeOperation =
-        "destination-out";
-
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    ctx.filter = "blur(45px)";
-
-    ctx.globalAlpha = 0.48;
-
-    ctx.lineWidth = BASE_WIDTH * 1.45;
-
-    smoothPath(alive);
-
-    ctx.stroke();
-
-    ctx.restore();
-
-
-    /*
-        -----------------------------------------------------
-        FADE TEMPORAL
-        -----------------------------------------------------
-
-        La parte antigua desaparece progresivamente.
-        No hay cortes bruscos.
-    */
-
-    ctx.save();
-
-    ctx.globalCompositeOperation =
-        "destination-out";
-
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    ctx.filter = "blur(18px)";
-
-    const oldest =
-        alive[0].time;
-
-    const newest =
-        alive[alive.length - 1].time;
-
-    const lifetime =
-        Math.max(1, newest - oldest);
-
-
-    /*
-        Dibujamos segmentos de forma continua
-        pero sin crear "marcas" visibles.
-    */
+    ctx.globalAlpha =
+        0.92;
 
     ctx.lineWidth =
-        BASE_WIDTH * 0.72;
+        BRUSH_WIDTH;
 
 
-    for (
-        let i = 1;
-        i < alive.length;
-        i++
-    ) {
+    buildSmoothPath(trail);
 
-        const p1 = alive[i - 1];
-        const p2 = alive[i];
+    ctx.stroke();
 
-        const age =
-            now - p1.time;
-
-        const fade =
-            Math.max(
-                0,
-                1 - age / TRAIL_LIFE
-            );
+    ctx.restore();
 
 
-        ctx.globalAlpha =
-            fade * 0.18;
+    /*
+        -----------------------------------------------------
+        HALO DEL PINCEL
+        -----------------------------------------------------
+
+        Una segunda pasada muy suave.
+        No son formas independientes:
+        sigue exactamente el mismo trazo.
+    */
+
+    ctx.save();
+
+    ctx.globalCompositeOperation =
+        "destination-out";
+
+    ctx.lineCap =
+        "round";
+
+    ctx.lineJoin =
+        "round";
+
+    ctx.filter =
+        "blur(55px)";
+
+    ctx.globalAlpha =
+        0.42;
+
+    ctx.lineWidth =
+        BRUSH_WIDTH * 1.35;
 
 
-        ctx.beginPath();
+    buildSmoothPath(trail);
 
-        ctx.moveTo(
-            p1.x,
-            p1.y
+    ctx.stroke();
+
+    ctx.restore();
+
+
+    /*
+        -----------------------------------------------------
+        EXTREMO DEL TRAZO
+        -----------------------------------------------------
+
+        El extremo reciente queda ligeramente
+        más transparente y suave.
+    */
+
+    const last =
+        trail[trail.length - 1];
+
+    const age =
+        now - last.time;
+
+
+    const endFade =
+        Math.max(
+            0,
+            1 - age / TRAIL_LIFE
         );
 
-        ctx.lineTo(
-            p2.x,
-            p2.y
-        );
 
-        ctx.stroke();
-    }
+    ctx.save();
+
+    ctx.globalCompositeOperation =
+        "destination-out";
+
+    ctx.lineCap =
+        "round";
+
+    ctx.filter =
+        "blur(35px)";
+
+    ctx.globalAlpha =
+        endFade * 0.35;
+
+    ctx.lineWidth =
+        BRUSH_WIDTH * 0.85;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        last.x,
+        last.y
+    );
+
+    ctx.lineTo(
+        last.x,
+        last.y
+    );
+
+    ctx.stroke();
 
     ctx.restore();
 }
 
 
 /* =========================================================
-   NIEBLA
+   MÁSCARA GRIS
 ========================================================= */
 
 function drawFog() {
 
     /*
-        Fondo gris continuo.
+        MUY IMPORTANTE:
+
+        Cada frame reconstruimos la capa gris.
+        Al ser semitransparente, la página de debajo
+        sigue siendo la fuente del efecto visual.
+
+        El trazo destination-out elimina partes
+        de esta capa.
     */
 
     const gradient =
@@ -1191,17 +1210,17 @@ function drawFog() {
 
     gradient.addColorStop(
         0,
-        "#bdbdbd"
+        "rgba(190,190,190,0.96)"
     );
 
     gradient.addColorStop(
         0.5,
-        "#9a9a9a"
+        "rgba(150,150,150,0.94)"
     );
 
     gradient.addColorStop(
         1,
-        "#777777"
+        "rgba(115,115,115,0.96)"
     );
 
 
@@ -1212,7 +1231,8 @@ function drawFog() {
 
     ctx.filter = "none";
 
-    ctx.fillStyle = gradient;
+    ctx.fillStyle =
+        gradient;
 
     ctx.fillRect(
         0,
@@ -1224,25 +1244,14 @@ function drawFog() {
 
 
 /* =========================================================
-   LOOP DEL SCREENSAVER
+   LOOP
 ========================================================= */
 
 function renderScreensaver(now) {
 
-    /*
-        Primero ponemos la niebla.
-    */
-
     drawFog();
 
-
-    /*
-        Después quitamos de la niebla
-        el trazo continuo.
-    */
-
     drawTrail(now);
-
 
     animationFrame =
         requestAnimationFrame(
@@ -1269,13 +1278,6 @@ screensaver.addEventListener(
             "hidden"
         );
 
-        /*
-            Paramos completamente el canvas
-            cuando ya no es necesario.
-
-            Esto evita gastar CPU durante
-            toda la navegación de la web.
-        */
 
         if (animationFrame) {
 
@@ -1286,9 +1288,12 @@ screensaver.addEventListener(
             animationFrame = null;
         }
 
-        canvas.style.display = "none";
 
-        document.body.style.cursor = "auto";
+        canvas.style.display =
+            "none";
+
+        document.body.style.cursor =
+            "auto";
     }
 );
 
@@ -1307,7 +1312,8 @@ const youtubeBlock =
     document.getElementById("youtubeBlock");
 
 
-let highlightTicking = false;
+let highlightTicking =
+    false;
 
 
 /* =========================================================
@@ -1321,31 +1327,21 @@ function updateHighlights() {
 
 
     /*
-        -----------------------------------------------------
         VIDEO VERTICAL
-        -----------------------------------------------------
     */
 
     const videoRect =
         faVideo.getBoundingClientRect();
 
-
     const videoCenter =
         videoRect.top +
         videoRect.height / 2;
-
 
     const distance =
         Math.abs(
             videoCenter -
             viewportCenter
         );
-
-
-    /*
-        Solo se activa cuando está realmente
-        cerca del centro.
-    */
 
     const videoIsCentered =
         distance <
@@ -1361,7 +1357,8 @@ function updateHighlights() {
 
         if (faVideo.paused) {
 
-            faVideo.play().catch(() => {});
+            faVideo.play()
+                .catch(() => {});
         }
 
     } else {
@@ -1379,19 +1376,15 @@ function updateHighlights() {
 
 
     /*
-        -----------------------------------------------------
         TEXTO
-        -----------------------------------------------------
     */
 
     const textRect =
         machineText.getBoundingClientRect();
 
-
     const textCenter =
         textRect.top +
         textRect.height / 2;
-
 
     const textVisible =
         Math.abs(
@@ -1416,19 +1409,15 @@ function updateHighlights() {
 
 
     /*
-        -----------------------------------------------------
         YOUTUBE
-        -----------------------------------------------------
     */
 
     const youtubeRect =
         youtubeBlock.getBoundingClientRect();
 
-
     const youtubeCenter =
         youtubeRect.top +
         youtubeRect.height / 2;
-
 
     const youtubeVisible =
         youtubeCenter <
@@ -1451,7 +1440,8 @@ function updateHighlights() {
     }
 
 
-    highlightTicking = false;
+    highlightTicking =
+        false;
 }
 
 
@@ -1486,7 +1476,7 @@ updateHighlights();
 
 
 /* =========================================================
-   LIMPIEZA AL CERRAR
+   LIMPIEZA
 ========================================================= */
 
 window.addEventListener(
