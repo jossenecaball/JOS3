@@ -115,7 +115,7 @@ body {
     padding-top: 8vh;
 }
 
-/* Título principal */
+/* Título */
 
 .highlights-title {
     position: sticky;
@@ -130,6 +130,8 @@ body {
     pointer-events: none;
 
     z-index: 5;
+
+    will-change: transform, opacity;
 }
 
 .highlights-title h2 {
@@ -144,11 +146,11 @@ body {
 
     opacity: 0.9;
 
-    transition: transform 0.15s linear;
+    will-change: transform, opacity;
 }
 
 /* =========================================================
-   DATOS DEL HIGHLIGHT
+   DATOS
 ========================================================= */
 
 .highlight-info {
@@ -198,8 +200,7 @@ body {
     left: 50%;
 
     transform:
-        translateX(-50%)
-        translateY(40px);
+        translate3d(-50%, 40px, 0);
 
     text-align: center;
 
@@ -207,9 +208,7 @@ body {
 
     opacity: 0;
 
-    transition:
-        opacity 0.2s linear,
-        transform 0.2s linear;
+    will-change: transform, opacity;
 }
 
 .project-small {
@@ -223,6 +222,7 @@ body {
 .project-name h3 {
     font-size: clamp(42px, 7vw, 100px);
     font-weight: 900;
+
     letter-spacing: -4px;
 
     white-space: nowrap;
@@ -264,24 +264,20 @@ body {
         0 0 80px rgba(255,255,255,0.04);
 
     transform:
-        translateY(180px)
+        translate3d(0, 180px, 0)
         rotateX(12deg)
         rotateY(-8deg)
         scale(0.65);
 
     opacity: 0;
 
-    transition:
-        transform 0.12s linear,
-        opacity 0.12s linear;
+    will-change: transform, opacity;
 }
-
-/* Marco */
 
 .vertical-video::before {
     content: "";
-
     position: absolute;
+
     inset: 12px;
 
     border: 1px solid rgba(255,255,255,0.12);
@@ -300,8 +296,6 @@ body {
     display: block;
 }
 
-/* Número lateral */
-
 .vertical-number {
     position: absolute;
 
@@ -319,7 +313,7 @@ body {
 }
 
 /* =========================================================
-   TEXTO ENTRE VÍDEOS
+   EXPERIENCIA
 ========================================================= */
 
 .experience {
@@ -367,8 +361,6 @@ body {
     color: rgba(255,255,255,0.55);
 }
 
-/* Línea central */
-
 .experience-line {
     width: 1px;
     height: 120px;
@@ -410,11 +402,9 @@ body {
 
     opacity: 0;
 
-    transform: translateY(50px);
+    transform: translate3d(0, 50px, 0);
 
-    transition:
-        opacity 0.2s linear,
-        transform 0.2s linear;
+    will-change: transform, opacity;
 }
 
 .youtube-title small {
@@ -436,8 +426,6 @@ body {
     letter-spacing: -3px;
 }
 
-/* Reproductor */
-
 .youtube-wrapper {
     position: relative;
 
@@ -448,12 +436,10 @@ body {
     opacity: 0;
 
     transform:
-        scale(0.65)
-        translateY(100px);
+        translate3d(0, 100px, 0)
+        scale(0.65);
 
-    transition:
-        opacity 0.15s linear,
-        transform 0.15s linear;
+    will-change: transform, opacity;
 
     border: 1px solid rgba(255,255,255,0.18);
 
@@ -474,7 +460,7 @@ body {
 }
 
 /* =========================================================
-   FIN DEL HIGHLIGHT
+   FINAL
 ========================================================= */
 
 .next-text {
@@ -595,10 +581,6 @@ body {
 
 <body>
 
-<!-- =====================================================
-     WEB
-===================================================== -->
-
 <main class="pagina">
 
     <!-- PORTADA -->
@@ -626,18 +608,12 @@ body {
 
     <section class="highlights" id="highlights">
 
-        <!-- TÍTULO -->
-
         <div class="highlights-title">
-
             <h2 id="highlightsTitle">
                 HIGHLIGHTS
             </h2>
-
         </div>
 
-
-        <!-- DATOS -->
 
         <div class="highlight-info">
 
@@ -659,8 +635,6 @@ body {
         <div class="tech-line"></div>
 
 
-        <!-- NOMBRE -->
-
         <div
             class="project-name"
             id="projectName"
@@ -677,9 +651,7 @@ body {
         </div>
 
 
-        <!-- =================================================
-             VÍDEO VERTICAL
-        ================================================= -->
+        <!-- VÍDEO VERTICAL -->
 
         <div
             class="vertical-scene"
@@ -708,9 +680,7 @@ body {
         </div>
 
 
-        <!-- =================================================
-             EXPERIENCIA
-        ================================================= -->
+        <!-- EXPERIENCIA -->
 
         <section
             class="experience"
@@ -737,9 +707,7 @@ body {
         </section>
 
 
-        <!-- =================================================
-             YOUTUBE
-        ================================================= -->
+        <!-- YOUTUBE -->
 
         <section
             class="youtube-scene"
@@ -817,7 +785,6 @@ const ctx =
 
 let brushMarks = [];
 
-
 function resizeCanvas() {
 
     canvas.width =
@@ -828,7 +795,6 @@ function resizeCanvas() {
 
     drawFog();
 }
-
 
 window.addEventListener(
     "resize",
@@ -890,10 +856,9 @@ function addBrushMark(
 
     brushMarks.push({
 
-        x: x,
-        y: y,
-
-        angle: angle,
+        x,
+        y,
+        angle,
 
         width:
             Math.min(
@@ -911,7 +876,10 @@ function addBrushMark(
 
         maxLife:
             600 +
-            Math.random() * 300
+            Math.random() * 300,
+
+        created:
+            performance.now()
 
     });
 }
@@ -1047,13 +1015,7 @@ function animateFog() {
 
                 const age =
                     currentTime -
-                    (
-                        mark.created ||
-                        (
-                            mark.created =
-                            currentTime
-                        )
-                    );
+                    mark.created;
 
                 mark.life =
                     1 -
@@ -1067,12 +1029,6 @@ function animateFog() {
                     return false;
                 }
 
-                const fade =
-                    Math.max(
-                        0,
-                        mark.life
-                    );
-
                 ctx.save();
 
                 ctx.translate(
@@ -1085,7 +1041,7 @@ function animateFog() {
                 );
 
                 ctx.globalAlpha =
-                    fade * 0.8;
+                    mark.life * 0.8;
 
                 ctx.beginPath();
 
@@ -1164,12 +1120,8 @@ canvas.addEventListener(
 
 /* =========================================================
    ANIMACIONES DEL SCROLL
+   OPTIMIZADAS
 ========================================================= */
-
-const highlights =
-    document.getElementById(
-        "highlights"
-    );
 
 const highlightsTitle =
     document.getElementById(
@@ -1196,11 +1148,6 @@ const verticalVideoElement =
         "video"
     );
 
-const experience =
-    document.getElementById(
-        "experience"
-    );
-
 const youtubeScene =
     document.getElementById(
         "youtubeScene"
@@ -1215,6 +1162,9 @@ const youtubeWrapper =
     document.getElementById(
         "youtubeWrapper"
     );
+
+
+let scrollTicking = false;
 
 
 function clamp(
@@ -1233,14 +1183,21 @@ function clamp(
 }
 
 
-function scrollAnimation() {
+/*
+    Toda la animación visual se ejecuta
+    como máximo una vez por frame.
+*/
+
+function updateScroll() {
+
+    scrollTicking = false;
 
     const windowHeight =
         window.innerHeight;
 
 
     /* =====================================================
-       HIGHLIGHTS TITLE
+       TÍTULO HIGHLIGHTS
     ===================================================== */
 
     const titleRect =
@@ -1255,9 +1212,11 @@ function scrollAnimation() {
         );
 
     highlightsTitle.style.transform =
-        `translateY(${
-            titleProgress * -120
-        }px)`;
+        `translate3d(
+            0,
+            ${titleProgress * -120}px,
+            0
+        )`;
 
     highlightsTitle.style.opacity =
         1 -
@@ -1265,7 +1224,7 @@ function scrollAnimation() {
 
 
     /* =====================================================
-       NOMBRE FA 470CC
+       NOMBRE FA
     ===================================================== */
 
     const nameRect =
@@ -1286,11 +1245,11 @@ function scrollAnimation() {
         nameProgress;
 
     projectName.style.transform =
-        `translateX(-50%)
-         translateY(${
-             40 -
-             nameProgress * 40
-         }px)`;
+        `translate3d(
+            -50%,
+            ${40 - nameProgress * 40}px,
+            0
+        )`;
 
 
     /* =====================================================
@@ -1316,16 +1275,13 @@ function scrollAnimation() {
         0.65 +
         videoProgress * 0.35;
 
-
     const y =
         180 -
         videoProgress * 180;
 
-
     const rotateX =
         12 -
         videoProgress * 12;
-
 
     const rotateY =
         -8 +
@@ -1335,26 +1291,60 @@ function scrollAnimation() {
     verticalVideo.style.opacity =
         videoProgress;
 
-
     verticalVideo.style.transform =
-        `translateY(${y}px)
-         rotateX(${rotateX}deg)
-         rotateY(${rotateY}deg)
-         scale(${scale})`;
+        `translate3d(
+            0,
+            ${y}px,
+            0
+        )
+        rotateX(${rotateX}deg)
+        rotateY(${rotateY}deg)
+        scale(${scale})`;
 
 
-    /* Reproducir el vídeo cuando aparece */
+    /* =====================================================
+       CONTROL DEL VÍDEO
 
-    if (
-        videoProgress > 0.15 &&
-        videoProgress < 0.95
-    ) {
+       SOLO REPRODUCE CUANDO ESTÁ
+       APROXIMADAMENTE CENTRADO.
+    ===================================================== */
+
+    const videoCenter =
+        videoRect.top +
+        videoRect.height / 2;
+
+    const screenCenter =
+        windowHeight / 2;
+
+    const distanceFromCenter =
+        Math.abs(
+            videoCenter -
+            screenCenter
+        );
+
+
+    /*
+       Zona de reproducción:
+       aproximadamente ±180 px
+       respecto al centro.
+    */
+
+    const isCentered =
+        distanceFromCenter <
+        Math.min(
+            180,
+            windowHeight * 0.18
+        );
+
+
+    if (isCentered) {
 
         if (
             verticalVideoElement.paused
         ) {
 
-            verticalVideoElement.play()
+            verticalVideoElement
+                .play()
                 .catch(() => {});
         }
 
@@ -1376,7 +1366,6 @@ function scrollAnimation() {
     const youtubeRect =
         youtubeScene.getBoundingClientRect();
 
-
     const youtubeProgress =
         clamp(
             (
@@ -1392,18 +1381,17 @@ function scrollAnimation() {
     youtubeTitle.style.opacity =
         youtubeProgress;
 
-
     youtubeTitle.style.transform =
-        `translateY(${
-            50 -
-            youtubeProgress * 50
-        }px)`;
+        `translate3d(
+            0,
+            ${50 - youtubeProgress * 50}px,
+            0
+        )`;
 
 
     const youtubeScale =
         0.65 +
         youtubeProgress * 0.35;
-
 
     const youtubeY =
         100 -
@@ -1413,30 +1401,55 @@ function scrollAnimation() {
     youtubeWrapper.style.opacity =
         youtubeProgress;
 
-
     youtubeWrapper.style.transform =
-        `scale(${youtubeScale})
-         translateY(${youtubeY}px)`;
+        `translate3d(
+            0,
+            ${youtubeY}px,
+            0
+        )
+        scale(${youtubeScale})`;
+}
 
+
+/*
+    RequestAnimationFrame para evitar
+    recalcular continuamente mientras
+    el navegador está dibujando.
+*/
+
+function requestScrollUpdate() {
+
+    if (!scrollTicking) {
+
+        scrollTicking = true;
+
+        requestAnimationFrame(
+            updateScroll
+        );
+    }
 }
 
 
 window.addEventListener(
     "scroll",
-    scrollAnimation,
+    requestScrollUpdate,
+    {
+        passive: true
+    }
+);
+
+window.addEventListener(
+    "resize",
+    requestScrollUpdate,
     {
         passive: true
     }
 );
 
 
-window.addEventListener(
-    "resize",
-    scrollAnimation
-);
+/* Primera actualización */
 
-
-scrollAnimation();
+updateScroll();
 
 </script>
 
