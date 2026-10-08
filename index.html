@@ -388,13 +388,6 @@ body {
 
     z-index: 9999;
 
-    /*
-        IMPORTANTE:
-        La capa es translúcida.
-        La web queda debajo y el canvas funciona
-        como máscara/revelado.
-    */
-
     background: rgba(145,145,145,0.94);
 
     cursor: none;
@@ -426,12 +419,6 @@ body {
     height: 100%;
 
     display: block;
-
-    /*
-        El canvas contiene únicamente la máscara gris.
-        La transparencia se consigue eliminando partes
-        de esta máscara.
-    */
 
     pointer-events: none;
 }
@@ -726,9 +713,6 @@ let width = 0;
 let height = 0;
 let dpr = 1;
 
-let mouseX = -1000;
-let mouseY = -1000;
-
 let previousX = -1000;
 let previousY = -1000;
 
@@ -740,18 +724,6 @@ let animationFrame = null;
 /* =========================================================
    TRAIL
 ========================================================= */
-
-/*
-    Una sola trayectoria continua.
-
-    No usamos:
-    - óvalos
-    - círculos
-    - stamps
-    - partículas
-
-    El pincel se construye como una curva continua.
-*/
 
 const trail = [];
 
@@ -831,11 +803,6 @@ window.addEventListener(
             performance.now();
 
 
-        /*
-            Si hemos estado quietos demasiado tiempo,
-            empezamos una nueva trayectoria.
-        */
-
         if (
             previousX < 0 ||
             previousY < 0 ||
@@ -870,13 +837,6 @@ window.addEventListener(
             return;
         }
 
-
-        /*
-            Interpolación continua.
-
-            Evita huecos cuando el ratón se mueve
-            rápidamente.
-        */
 
         const steps =
             Math.max(
@@ -1029,10 +989,6 @@ function buildSmoothPath(points) {
 
 function drawTrail(now) {
 
-    /*
-        Eliminamos puntos caducados.
-    */
-
     while (
         trail.length &&
         now - trail[0].time >
@@ -1049,12 +1005,7 @@ function drawTrail(now) {
 
 
     /*
-        -----------------------------------------------------
         TRAZO PRINCIPAL
-        -----------------------------------------------------
-
-        destination-out elimina la capa gris
-        y deja ver directamente la web inferior.
     */
 
     ctx.save();
@@ -1086,13 +1037,7 @@ function drawTrail(now) {
 
 
     /*
-        -----------------------------------------------------
-        HALO DEL PINCEL
-        -----------------------------------------------------
-
-        Una segunda pasada muy suave.
-        No son formas independientes:
-        sigue exactamente el mismo trazo.
+        HALO SUAVE
     */
 
     ctx.save();
@@ -1124,12 +1069,7 @@ function drawTrail(now) {
 
 
     /*
-        -----------------------------------------------------
-        EXTREMO DEL TRAZO
-        -----------------------------------------------------
-
-        El extremo reciente queda ligeramente
-        más transparente y suave.
+        EXTREMO
     */
 
     const last =
@@ -1187,17 +1127,6 @@ function drawTrail(now) {
 ========================================================= */
 
 function drawFog() {
-
-    /*
-        MUY IMPORTANTE:
-
-        Cada frame reconstruimos la capa gris.
-        Al ser semitransparente, la página de debajo
-        sigue siendo la fuente del efecto visual.
-
-        El trazo destination-out elimina partes
-        de esta capa.
-    */
 
     const gradient =
         ctx.createLinearGradient(
@@ -1270,30 +1199,88 @@ animationFrame =
    ENTRAR EN LA WEB
 ========================================================= */
 
-screensaver.addEventListener(
-    "click",
-    () => {
+let screensaverClosed = false;
 
-        screensaver.classList.add(
-            "hidden"
+function enterWebsite() {
+
+    if (screensaverClosed) {
+        return;
+    }
+
+    screensaverClosed = true;
+
+    screensaver.classList.add(
+        "hidden"
+    );
+
+
+    if (animationFrame) {
+
+        cancelAnimationFrame(
+            animationFrame
         );
 
+        animationFrame = null;
+    }
 
-        if (animationFrame) {
 
-            cancelAnimationFrame(
-                animationFrame
-            );
+    canvas.style.display =
+        "none";
 
-            animationFrame = null;
+    document.body.style.cursor =
+        "auto";
+}
+
+
+/* =========================================================
+   CLICK
+========================================================= */
+
+screensaver.addEventListener(
+    "click",
+    enterWebsite
+);
+
+
+/* =========================================================
+   SCROLL
+========================================================= */
+
+/*
+    Si el usuario intenta hacer scroll antes de clicar,
+    el salvapantallas desaparece automáticamente.
+*/
+
+window.addEventListener(
+    "wheel",
+    (event) => {
+
+        if (!screensaverClosed) {
+
+            enterWebsite();
         }
+    },
+    {
+        passive: true
+    }
+);
 
 
-        canvas.style.display =
-            "none";
+/* =========================================================
+   MÓVIL / TOUCH
+========================================================= */
 
-        document.body.style.cursor =
-            "auto";
+window.addEventListener(
+    "touchstart",
+    () => {
+
+        if (!screensaverClosed) {
+
+            enterWebsite();
+        }
+    },
+    {
+        passive: true
     }
 );
 
