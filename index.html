@@ -1,195 +1,319 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>JOS3</title>
 
 <style>
-
-/* =====================================================
-   CONFIGURACIÓN GENERAL
-===================================================== */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html,
-body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: Arial, Helvetica, sans-serif;
+html {
+    scroll-behavior: smooth;
 }
 
+body {
+    background: #0a0a0a;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+}
 
-/* =====================================================
-   PÁGINA PRINCIPAL
-===================================================== */
+/* =========================================================
+   WEB PRINCIPAL
+========================================================= */
 
 .pagina {
-
-    position: fixed;
-    inset: 0;
-
+    min-height: 100vh;
     background:
-        radial-gradient(
-            circle at 50% 42%,
-            #3a3a3a 0%,
-            #1d1d1d 48%,
-            #0b0b0b 100%
-        );
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    color: white;
+        radial-gradient(circle at 50% 20%, #3a3a3a 0%, #1d1d1d 45%, #080808 100%);
+    position: relative;
+    overflow: hidden;
 }
 
-
-/* =====================================================
-   DETALLES INDUSTRIALES DEL FONDO
-===================================================== */
+/* Textura industrial */
 
 .pagina::before {
-
     content: "";
-
     position: absolute;
-
     inset: 0;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.025) 25%,
-            transparent 25%,
-            transparent 50%,
-            rgba(255,255,255,.025) 50%,
-            rgba(255,255,255,.025) 75%,
-            transparent 75%
-        );
-
-    background-size:
-        8px 8px;
-
-    opacity: .35;
-
     pointer-events: none;
+    opacity: 0.12;
+
+    background-image:
+        repeating-linear-gradient(
+            135deg,
+            transparent 0px,
+            transparent 7px,
+            rgba(255,255,255,0.08) 8px,
+            transparent 9px
+        );
 }
 
+/* =========================================================
+   PORTADA
+========================================================= */
 
-/* =====================================================
-   CONTENIDO PRINCIPAL
-===================================================== */
-
-.contenido {
-
-    position: relative;
-
-    z-index: 2;
-
-    width: 100%;
+.hero {
+    min-height: 100vh;
+    height: 100vh;
 
     display: flex;
-
     flex-direction: column;
-
+    justify-content: center;
     align-items: center;
 
-    justify-content: center;
-
+    position: relative;
+    z-index: 2;
 }
-
-
-/* =====================================================
-   LOGO PRINCIPAL JOS3
-===================================================== */
 
 .logo-principal {
-
-    width:
-        min(
-            620px,
-            72vw
-        );
-
-    max-height: 45vh;
-
-    object-fit: contain;
+    width: min(650px, 75vw);
+    max-width: 650px;
+    height: auto;
 
     filter:
-        drop-shadow(
-            0 15px 35px
-            rgba(
-                0,
-                0,
-                0,
-                .65
-            )
-        );
-
+        drop-shadow(0 15px 30px rgba(0,0,0,0.7))
+        drop-shadow(0 0 20px rgba(255,255,255,0.08));
 }
 
-
-/* =====================================================
-   TEXTO INFERIOR PROVISIONAL
-===================================================== */
-
-.subtitulo {
+.linea {
+    width: min(520px, 65vw);
+    height: 1px;
 
     margin-top: 35px;
 
-    font-size: 13px;
-
-    letter-spacing: 8px;
-
-    text-transform: uppercase;
-
-    color: #aaa;
-
-    opacity: .65;
-
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.7),
+        transparent
+    );
 }
 
+.subtitulo {
+    margin-top: 18px;
 
-/* =====================================================
-   LÍNEA INDUSTRIAL
-===================================================== */
+    font-size: 12px;
+    letter-spacing: 7px;
+    color: #bcbcbc;
+    text-align: center;
+}
 
-.linea {
+/* =========================================================
+   HIGHLIGHTS
+========================================================= */
+
+.highlights {
+    min-height: 250vh;
+    position: relative;
+    z-index: 2;
+
+    padding-top: 15vh;
+}
+
+/* Título */
+
+.highlights-title {
+    position: sticky;
+    top: 12vh;
+
+    height: 25vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    pointer-events: none;
+
+    z-index: 5;
+}
+
+.highlights-title h2 {
+    font-size: clamp(70px, 14vw, 210px);
+    font-weight: 900;
+
+    letter-spacing: -8px;
+
+    color: transparent;
+
+    -webkit-text-stroke: 1px rgba(255,255,255,0.55);
+
+    opacity: 0.9;
+
+    transition: transform 0.2s linear;
+}
+
+/* Pequeños datos técnicos */
+
+.highlight-info {
+    position: absolute;
+
+    left: 5vw;
+    top: 47vh;
+
+    z-index: 10;
+
+    font-size: 10px;
+    letter-spacing: 4px;
+
+    color: rgba(255,255,255,0.55);
+
+    line-height: 2;
+}
+
+.highlight-info span {
+    color: white;
+}
+
+/* Línea decorativa */
+
+.tech-line {
+    position: absolute;
+
+    top: 53vh;
+    right: 5vw;
 
     width: 180px;
-
     height: 1px;
 
-    margin-top: 22px;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            #999,
-            transparent
-        );
-
-    opacity: .5;
-
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.5)
+    );
 }
 
+/* =========================================================
+   VIDEO
+========================================================= */
 
-/* =====================================================
-   CANVAS DEL SALVAPANTALLAS
-===================================================== */
+.video-wrapper {
+    position: relative;
+
+    width: min(1000px, 82vw);
+    aspect-ratio: 16 / 9;
+
+    margin: 10vh auto 0;
+
+    transform:
+        translateY(180px)
+        scale(0.55);
+
+    opacity: 0;
+
+    border: 1px solid rgba(255,255,255,0.18);
+
+    box-shadow:
+        0 40px 100px rgba(0,0,0,0.8),
+        0 0 50px rgba(255,255,255,0.04);
+
+    overflow: hidden;
+
+    background: #050505;
+
+    transition:
+        transform 0.15s linear,
+        opacity 0.15s linear;
+}
+
+/* Marco exterior */
+
+.video-wrapper::before {
+    content: "";
+
+    position: absolute;
+    inset: -1px;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    pointer-events: none;
+
+    z-index: 5;
+}
+
+/* Video */
+
+.video-wrapper iframe {
+    width: 100%;
+    height: 100%;
+
+    border: none;
+
+    display: block;
+}
+
+/* Nombre del vídeo */
+
+.video-name {
+    position: absolute;
+
+    bottom: 25px;
+    left: 30px;
+
+    z-index: 10;
+
+    font-size: 12px;
+    letter-spacing: 4px;
+
+    color: white;
+
+    text-shadow:
+        0 2px 10px rgba(0,0,0,0.8);
+}
+
+/* Número */
+
+.video-number {
+    position: absolute;
+
+    top: 25px;
+    right: 30px;
+
+    z-index: 10;
+
+    font-size: 11px;
+    letter-spacing: 3px;
+
+    color: rgba(255,255,255,0.65);
+}
+
+/* =========================================================
+   TRANSICIÓN
+========================================================= */
+
+.transition-text {
+    width: 100%;
+
+    text-align: center;
+
+    margin-top: 35vh;
+
+    font-size: 11px;
+    letter-spacing: 6px;
+
+    color: rgba(255,255,255,0.35);
+
+    opacity: 0;
+
+    transform: translateY(30px);
+
+    transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
+}
+
+/* =========================================================
+   SALVAPANTALLAS
+   NO TOCAR
+========================================================= */
 
 #niebla {
-
     position: fixed;
 
     inset: 0;
@@ -197,135 +321,101 @@ body {
     width: 100%;
     height: 100%;
 
-    z-index: 20;
+    z-index: 9999;
 
-    pointer-events: none;
+    pointer-events: auto;
 
-    transition:
-        opacity 1.1s ease;
-
+    background: transparent;
 }
 
-
-/* =====================================================
-   LOGO SECUNDARIO DEL SALVAPANTALLAS
-===================================================== */
-
-.logo {
-
+.logo-secundario {
     position: fixed;
 
-    z-index: 30;
-
-    left: 50%;
     top: 50%;
+    left: 50%;
 
-    transform:
-        translate(
-            -50%,
-            -50%
-        );
+    transform: translate(-50%, -50%);
 
-    width:
-        min(
-            300px,
-            45vw
-        );
+    width: min(330px, 55vw);
+
+    z-index: 10000;
 
     pointer-events: none;
 
     filter:
-        drop-shadow(
-            0 12px 25px
-            rgba(
-                0,
-                0,
-                0,
-                .22
-            )
-        );
+        drop-shadow(0 15px 30px rgba(0,0,0,0.5));
 
     transition:
-
-        opacity .6s ease,
-
-        transform .8s ease;
-
+        opacity 0.8s ease,
+        transform 0.8s ease;
 }
 
-
-/* =====================================================
-   SALIDA
-===================================================== */
-
-#niebla.salir {
-
-    opacity: 0;
-
-}
-
-
-.logo.salir {
-
-    opacity: 0;
+.ocultar {
+    opacity: 0 !important;
 
     transform:
-
-        translate(
-            -50%,
-            -50%
-        )
-
-        scale(1.25);
-
+        translate(-50%, -50%)
+        scale(1.08) !important;
 }
 
-
-/* =====================================================
-   MÓVIL
-===================================================== */
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media (max-width: 700px) {
 
-    .logo {
-
-        width: 55vw;
-
-    }
-
     .logo-principal {
-
         width: 82vw;
-
     }
 
     .subtitulo {
-
-        font-size: 10px;
-
-        letter-spacing: 5px;
-
+        font-size: 9px;
+        letter-spacing: 4px;
     }
 
+    .highlights-title h2 {
+        letter-spacing: -4px;
+    }
+
+    .highlight-info {
+        left: 6vw;
+        top: 43vh;
+    }
+
+    .tech-line {
+        right: 6vw;
+        width: 100px;
+    }
+
+    .video-wrapper {
+        width: 92vw;
+    }
+
+    .video-name {
+        font-size: 9px;
+        left: 15px;
+        bottom: 15px;
+    }
+
+    .video-number {
+        right: 15px;
+        top: 15px;
+    }
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
 <!-- =====================================================
-     PÁGINA REAL
+     WEB PRINCIPAL
 ===================================================== -->
 
-<div class="pagina">
+<main class="pagina">
 
-    <div class="contenido">
+    <!-- PORTADA -->
 
-        <!-- LOGO PRINCIPAL -->
+    <section class="hero">
 
         <img
             src="logo-principal.png"
@@ -333,512 +423,355 @@ body {
             class="logo-principal"
         >
 
-
-        <!-- ELEMENTOS PROVISIONALES -->
-
         <div class="linea"></div>
 
         <div class="subtitulo">
             AUTOMOTIVE · PHOTOGRAPHY · LIFESTYLE
         </div>
 
-    </div>
+    </section>
 
-</div>
+
+    <!-- =================================================
+         HIGHLIGHTS
+    ================================================= -->
+
+    <section class="highlights" id="highlights">
+
+        <div class="highlights-title">
+            <h2 id="highlightsTitle">
+                HIGHLIGHTS
+            </h2>
+        </div>
+
+
+        <div class="highlight-info">
+
+            <div>
+                PROJECT <span>01</span>
+            </div>
+
+            <div>
+                CATEGORY <span>AUTOMOTIVE</span>
+            </div>
+
+            <div>
+                FORMAT <span>16:9</span>
+            </div>
+
+        </div>
+
+
+        <div class="tech-line"></div>
+
+
+        <!-- VIDEO -->
+
+        <div
+            class="video-wrapper"
+            id="videoWrapper"
+        >
+
+            <iframe
+                src="https://www.youtube.com/embed/sMszBMthOQI?rel=0&modestbranding=1"
+                title="Probando FA 470cc"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+            </iframe>
+
+            <div class="video-name">
+                PROBANDO FA 470CC
+            </div>
+
+            <div class="video-number">
+                HIGHLIGHT / 01
+            </div>
+
+        </div>
+
+
+        <div
+            class="transition-text"
+            id="transitionText"
+        >
+            SCROLL TO CONTINUE
+        </div>
+
+    </section>
+
+</main>
 
 
 <!-- =====================================================
      SALVAPANTALLAS
-     NO MODIFICAR
 ===================================================== -->
 
-<canvas
-    id="niebla">
-</canvas>
-
-
-<!-- =====================================================
-     LOGO SECUNDARIO J3
-     NO MODIFICAR
-===================================================== -->
+<canvas id="niebla"></canvas>
 
 <img
     src="logo-secundario.png"
     alt="JOS3"
-    class="logo"
-    id="logo"
+    class="logo-secundario"
+    id="logoSecundario"
 >
 
 
 <script>
 
+/* =========================================================
+   SALVAPANTALLAS
+   NO TOCAR
+========================================================= */
 
-/* =====================================================
-   CANVAS
-   SALVAPANTALLAS — NO MODIFICAR
-===================================================== */
+const canvas = document.getElementById("niebla");
+const ctx = canvas.getContext("2d");
 
-const canvas =
-    document.getElementById(
-        "niebla"
-    );
+let brushMarks = [];
 
-const ctx =
-    canvas.getContext(
-        "2d"
-    );
+function resizeCanvas() {
 
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-let ancho = 0;
-let alto = 0;
-
-
-/* =====================================================
-   AJUSTAR CANVAS
-===================================================== */
-
-function ajustarCanvas() {
-
-    ancho =
-        window.innerWidth;
-
-    alto =
-        window.innerHeight;
-
-    const dpr =
-        window.devicePixelRatio || 1;
-
-    canvas.width =
-        ancho * dpr;
-
-    canvas.height =
-        alto * dpr;
-
-    canvas.style.width =
-        ancho + "px";
-
-    canvas.style.height =
-        alto + "px";
-
-    ctx.setTransform(
-        dpr,
-        0,
-        0,
-        dpr,
-        0,
-        0
-    );
-
+    drawFog();
 }
 
+window.addEventListener("resize", resizeCanvas);
 
-ajustarCanvas();
 
+function drawFog() {
 
-window.addEventListener(
-    "resize",
-    ajustarCanvas
-);
+    ctx.globalCompositeOperation = "source-over";
 
-
-/* =====================================================
-   PINCEL
-===================================================== */
-
-let pinceladas = [];
-
-
-let ultimoX = null;
-let ultimoY = null;
-
-
-/* =====================================================
-   RATÓN
-===================================================== */
-
-document.addEventListener(
-    "mousemove",
-    function(event) {
-
-        const x =
-            event.clientX;
-
-        const y =
-            event.clientY;
-
-
-        if (
-            ultimoX === null
-        ) {
-
-            ultimoX = x;
-            ultimoY = y;
-
-            return;
-
-        }
-
-
-        const dx =
-            x - ultimoX;
-
-        const dy =
-            y - ultimoY;
-
-        const distancia =
-            Math.sqrt(
-                dx * dx +
-                dy * dy
-            );
-
-
-        if (
-            distancia < 2
-        ) {
-
-            return;
-
-        }
-
-
-        const cantidad =
-            Math.max(
-                1,
-                Math.ceil(
-                    distancia / 6
-                )
-            );
-
-
-        const angulo =
-            Math.atan2(
-                dy,
-                dx
-            );
-
-
-        for (
-            let i = 0;
-            i < cantidad;
-            i++
-        ) {
-
-            const t =
-                i / cantidad;
-
-
-            const px =
-                ultimoX +
-                dx * t;
-
-            const py =
-                ultimoY +
-                dy * t;
-
-
-            const desviacion =
-                (
-                    Math.random() - .5
-                ) * 18;
-
-
-            const anchoPincel =
-                38 +
-                Math.random() * 28;
-
-
-            const altoPincel =
-                18 +
-                Math.random() * 18;
-
-
-            pinceladas.push({
-
-                x:
-                    px +
-                    Math.cos(
-                        angulo +
-                        Math.PI / 2
-                    ) *
-                    desviacion,
-
-                y:
-                    py +
-                    Math.sin(
-                        angulo +
-                        Math.PI / 2
-                    ) *
-                    desviacion,
-
-                ancho:
-                    anchoPincel,
-
-                alto:
-                    altoPincel,
-
-                angulo:
-                    angulo +
-                    (
-                        Math.random() - .5
-                    ) *
-                    .45,
-
-                vida:
-                    1,
-
-                velocidad:
-                    .025 +
-                    Math.random() * .012
-
-            });
-
-        }
-
-
-        ultimoX = x;
-        ultimoY = y;
-
-    }
-);
-
-
-/* =====================================================
-   DIBUJAR SALVAPANTALLAS
-===================================================== */
-
-function dibujar() {
-
-
-    const fondo =
-        ctx.createRadialGradient(
-
-            ancho / 2,
-            alto / 2,
-            0,
-
-            ancho / 2,
-            alto / 2,
-            Math.max(
-                ancho,
-                alto
-            )
-
-        );
-
-
-    fondo.addColorStop(
+    const gradient = ctx.createRadialGradient(
+        canvas.width / 2,
+        canvas.height / 2,
         0,
-        "#bdbdbd"
+        canvas.width / 2,
+        canvas.height / 2,
+        Math.max(canvas.width, canvas.height)
     );
 
-    fondo.addColorStop(
-        .55,
-        "#969696"
-    );
+    gradient.addColorStop(0, "#bdbdbd");
+    gradient.addColorStop(0.5, "#969696");
+    gradient.addColorStop(1, "#707070");
 
-    fondo.addColorStop(
-        1,
-        "#707070"
-    );
-
-
-    ctx.globalCompositeOperation =
-        "source-over";
-
-
-    ctx.fillStyle =
-        fondo;
-
+    ctx.fillStyle = gradient;
 
     ctx.fillRect(
         0,
         0,
-        ancho,
-        alto
+        canvas.width,
+        canvas.height
     );
-
-
-    for (
-        let i =
-            pinceladas.length - 1;
-
-        i >= 0;
-
-        i--
-    ) {
-
-        const p =
-            pinceladas[i];
-
-
-        p.vida -=
-            p.velocidad;
-
-
-        if (
-            p.vida <= 0
-        ) {
-
-            pinceladas.splice(
-                i,
-                1
-            );
-
-            continue;
-
-        }
-
-
-        const radio =
-            Math.max(
-                p.ancho,
-                p.alto
-            );
-
-
-        const gradiente =
-            ctx.createRadialGradient(
-
-                0,
-                0,
-                0,
-
-                0,
-                0,
-                radio
-
-            );
-
-
-        gradiente.addColorStop(
-            0,
-            "rgba(0,0,0,1)"
-        );
-
-
-        gradiente.addColorStop(
-            .35,
-            "rgba(0,0,0,.75)"
-        );
-
-
-        gradiente.addColorStop(
-            .70,
-            "rgba(0,0,0,.30)"
-        );
-
-
-        gradiente.addColorStop(
-            1,
-            "rgba(0,0,0,0)"
-        );
-
-
-        ctx.save();
-
-
-        ctx.translate(
-            p.x,
-            p.y
-        );
-
-
-        ctx.rotate(
-            p.angulo
-        );
-
-
-        ctx.scale(
-            1,
-            p.alto /
-            p.ancho
-        );
-
-
-        ctx.globalCompositeOperation =
-            "destination-out";
-
-
-        ctx.globalAlpha =
-            p.vida;
-
-
-        ctx.fillStyle =
-            gradiente;
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-            0,
-            0,
-            p.ancho,
-            0,
-            Math.PI * 2
-        );
-
-
-        ctx.fill();
-
-
-        ctx.restore();
-
-    }
-
-
-    requestAnimationFrame(
-        dibujar
-    );
-
 }
 
 
-dibujar();
+function addBrushMark(x, y, angle, speed) {
+
+    brushMarks.push({
+
+        x: x,
+        y: y,
+
+        angle: angle,
+
+        width:
+            Math.min(120, 35 + speed * 0.8),
+
+        height:
+            Math.min(55, 20 + speed * 0.35),
+
+        life: 1,
+
+        maxLife:
+            600 + Math.random() * 300
+
+    });
+}
 
 
-/* =====================================================
-   ENTRADA A LA WEB
-===================================================== */
+let lastMouseX = null;
+let lastMouseY = null;
+let lastMouseTime = performance.now();
 
-const logo =
+
+window.addEventListener("mousemove", function(e) {
+
+    const now = performance.now();
+
+    if (
+        lastMouseX !== null &&
+        lastMouseY !== null
+    ) {
+
+        const dx = e.clientX - lastMouseX;
+        const dy = e.clientY - lastMouseY;
+
+        const distance = Math.sqrt(
+            dx * dx + dy * dy
+        );
+
+        const dt = Math.max(
+            now - lastMouseTime,
+            1
+        );
+
+        const speed = distance / dt * 16;
+
+        if (distance > 2) {
+
+            const angle = Math.atan2(dy, dx);
+
+            const steps =
+                Math.max(
+                    1,
+                    Math.floor(distance / 15)
+                );
+
+            for (
+                let i = 0;
+                i < steps;
+                i++
+            ) {
+
+                const t = i / steps;
+
+                const px =
+                    lastMouseX +
+                    dx * t;
+
+                const py =
+                    lastMouseY +
+                    dy * t;
+
+                const offset =
+                    (Math.random() - 0.5) * 25;
+
+                const perpX =
+                    -Math.sin(angle) * offset;
+
+                const perpY =
+                    Math.cos(angle) * offset;
+
+                addBrushMark(
+                    px + perpX,
+                    py + perpY,
+                    angle,
+                    speed
+                );
+            }
+        }
+    }
+
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+    lastMouseTime = now;
+
+});
+
+
+function animateFog(time) {
+
+    drawFog();
+
+    ctx.globalCompositeOperation =
+        "destination-out";
+
+    const currentTime = performance.now();
+
+    brushMarks =
+        brushMarks.filter(mark => {
+
+            const age =
+                currentTime -
+                (
+                    mark.created ||
+                    (mark.created = currentTime)
+                );
+
+            mark.life =
+                1 -
+                age / mark.maxLife;
+
+            if (mark.life <= 0) {
+                return false;
+            }
+
+            const fade =
+                Math.max(
+                    0,
+                    mark.life
+                );
+
+            ctx.save();
+
+            ctx.translate(
+                mark.x,
+                mark.y
+            );
+
+            ctx.rotate(
+                mark.angle
+            );
+
+            ctx.globalAlpha =
+                fade * 0.8;
+
+            ctx.beginPath();
+
+            ctx.ellipse(
+                0,
+                0,
+                mark.width,
+                mark.height,
+                0,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+            ctx.restore();
+
+            return true;
+
+        });
+
+    requestAnimationFrame(
+        animateFog
+    );
+}
+
+
+resizeCanvas();
+
+requestAnimationFrame(
+    animateFog
+);
+
+
+/* =========================================================
+   SALIR DEL SALVAPANTALLAS
+========================================================= */
+
+const logoSecundario =
     document.getElementById(
-        "logo"
+        "logoSecundario"
     );
 
-
-let entrando = false;
-
-
-document.addEventListener(
+canvas.addEventListener(
     "click",
     function() {
 
-        if (
-            entrando
-        ) {
+        canvas.style.transition =
+            "opacity 1s ease";
 
-            return;
+        canvas.style.opacity = "0";
 
-        }
-
-
-        entrando = true;
-
-
-        document.body.style.cursor =
-            "default";
-
-
-        canvas.classList.add(
-            "salir"
+        logoSecundario.classList.add(
+            "ocultar"
         );
-
-
-        logo.classList.add(
-            "salir"
-        );
-
 
         setTimeout(
             function() {
@@ -846,18 +779,159 @@ document.addEventListener(
                 canvas.style.display =
                     "none";
 
-                logo.style.display =
+                logoSecundario.style.display =
                     "none";
 
-                document.body.style.overflow =
-                    "auto";
-
             },
-            1200
+            1000
         );
 
     }
 );
+
+
+/* =========================================================
+   ANIMACIÓN DEL SCROLL
+========================================================= */
+
+const videoWrapper =
+    document.getElementById(
+        "videoWrapper"
+    );
+
+const highlightsTitle =
+    document.getElementById(
+        "highlightsTitle"
+    );
+
+const transitionText =
+    document.getElementById(
+        "transitionText"
+    );
+
+
+function updateScrollAnimation() {
+
+    const rect =
+        videoWrapper.getBoundingClientRect();
+
+    const windowHeight =
+        window.innerHeight;
+
+
+    /*
+       PROGRESO DE ENTRADA
+    */
+
+    const start =
+        windowHeight * 0.95;
+
+    const end =
+        windowHeight * 0.20;
+
+    let progress =
+        (start - rect.top) /
+        (start - end);
+
+    progress =
+        Math.max(
+            0,
+            Math.min(
+                1,
+                progress
+            )
+        );
+
+
+    /*
+       ESCALA DEL VÍDEO
+    */
+
+    const scale =
+        0.55 +
+        progress * 0.45;
+
+
+    const translateY =
+        180 -
+        progress * 180;
+
+
+    videoWrapper.style.transform =
+        `translateY(${translateY}px) scale(${scale})`;
+
+
+    videoWrapper.style.opacity =
+        progress;
+
+
+    /*
+       MOVIMIENTO DEL TÍTULO
+    */
+
+    const titleRect =
+        highlightsTitle.getBoundingClientRect();
+
+    const titleProgress =
+        Math.max(
+            0,
+            Math.min(
+                1,
+                -titleRect.top /
+                (windowHeight * 0.7)
+            )
+        );
+
+
+    highlightsTitle.style.transform =
+        `translateY(${
+            titleProgress * -80
+        }px)`;
+
+
+    highlightsTitle.style.opacity =
+        1 -
+        titleProgress * 0.7;
+
+
+    /*
+       TEXTO FINAL
+    */
+
+    if (progress > 0.75) {
+
+        transitionText.style.opacity =
+            (progress - 0.75) * 4;
+
+        transitionText.style.transform =
+            `translateY(${
+                30 -
+                (progress - 0.75) * 120
+            }px)`;
+
+    } else {
+
+        transitionText.style.opacity =
+            0;
+
+        transitionText.style.transform =
+            "translateY(30px)";
+    }
+
+}
+
+
+window.addEventListener(
+    "scroll",
+    updateScrollAnimation
+);
+
+window.addEventListener(
+    "resize",
+    updateScrollAnimation
+);
+
+updateScrollAnimation();
 
 </script>
 
