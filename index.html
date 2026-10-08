@@ -15,6 +15,7 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 body {
@@ -114,8 +115,6 @@ body {
 
     padding-top: 8vh;
 }
-
-/* Título */
 
 .highlights-title {
     position: sticky;
@@ -479,7 +478,6 @@ body {
 
 /* =========================================================
    SALVAPANTALLAS
-   NO TOCAR
 ========================================================= */
 
 #niebla {
@@ -609,9 +607,11 @@ body {
     <section class="highlights" id="highlights">
 
         <div class="highlights-title">
+
             <h2 id="highlightsTitle">
                 HIGHLIGHTS
             </h2>
+
         </div>
 
 
@@ -773,8 +773,25 @@ body {
 <script>
 
 /* =========================================================
+   RECARGA SIEMPRE DESDE ARRIBA
+========================================================= */
+
+if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+}
+
+window.addEventListener("load", function () {
+    window.scrollTo(0, 0);
+});
+
+window.addEventListener("pageshow", function () {
+    window.scrollTo(0, 0);
+});
+
+
+/* =========================================================
    SALVAPANTALLAS
-   NO TOCAR
+   ESTELA SUAVE
 ========================================================= */
 
 const canvas =
@@ -787,11 +804,32 @@ let brushMarks = [];
 
 function resizeCanvas() {
 
+    const dpr =
+        Math.min(
+            window.devicePixelRatio || 1,
+            1.5
+        );
+
     canvas.width =
-        window.innerWidth;
+        window.innerWidth * dpr;
 
     canvas.height =
-        window.innerHeight;
+        window.innerHeight * dpr;
+
+    canvas.style.width =
+        window.innerWidth + "px";
+
+    canvas.style.height =
+        window.innerHeight + "px";
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
 
     drawFog();
 }
@@ -809,14 +847,14 @@ function drawFog() {
 
     const gradient =
         ctx.createRadialGradient(
-            canvas.width / 2,
-            canvas.height / 2,
+            window.innerWidth / 2,
+            window.innerHeight / 2,
             0,
-            canvas.width / 2,
-            canvas.height / 2,
+            window.innerWidth / 2,
+            window.innerHeight / 2,
             Math.max(
-                canvas.width,
-                canvas.height
+                window.innerWidth,
+                window.innerHeight
             )
         );
 
@@ -841,11 +879,17 @@ function drawFog() {
     ctx.fillRect(
         0,
         0,
-        canvas.width,
-        canvas.height
+        window.innerWidth,
+        window.innerHeight
     );
 }
 
+
+/*
+    En vez de dibujar muchos óvalos
+    independientes, cada marca tiene
+    una dirección y una longitud.
+*/
 
 function addBrushMark(
     x,
@@ -854,34 +898,59 @@ function addBrushMark(
     speed
 ) {
 
+    const length =
+        Math.min(
+            170,
+            Math.max(
+                65,
+                75 + speed * 3
+            )
+        );
+
+    const width =
+        Math.min(
+            42,
+            Math.max(
+                18,
+                24 + speed * 0.3
+            )
+        );
+
     brushMarks.push({
 
         x,
         y,
+
         angle,
 
-        width:
-            Math.min(
-                120,
-                35 + speed * 0.8
-            ),
+        length,
 
-        height:
-            Math.min(
-                55,
-                20 + speed * 0.35
-            ),
-
-        life: 1,
-
-        maxLife:
-            600 +
-            Math.random() * 300,
+        width,
 
         created:
-            performance.now()
+            performance.now(),
+
+        life:
+            0,
+
+        duration:
+            650 +
+            Math.random() * 180
 
     });
+
+    /*
+       Evita que una acumulación enorme
+       de marcas pueda afectar a la fluidez.
+    */
+
+    if (brushMarks.length > 160) {
+
+        brushMarks.splice(
+            0,
+            brushMarks.length - 160
+        );
+    }
 }
 
 
@@ -929,6 +998,7 @@ window.addEventListener(
                 dt *
                 16;
 
+
             if (distance > 2) {
 
                 const angle =
@@ -937,11 +1007,16 @@ window.addEventListener(
                         dx
                     );
 
+                /*
+                   Interpolamos el recorrido
+                   para crear una estela continua.
+                */
+
                 const steps =
                     Math.max(
                         1,
-                        Math.floor(
-                            distance / 15
+                        Math.ceil(
+                            distance / 22
                         )
                     );
 
@@ -962,11 +1037,16 @@ window.addEventListener(
                         lastMouseY +
                         dy * t;
 
+                    /*
+                       Pequeña variación lateral,
+                       pero mucho más controlada.
+                    */
+
                     const offset =
                         (
                             Math.random() -
                             0.5
-                        ) * 25;
+                        ) * 10;
 
                     const perpX =
                         -Math.sin(angle) *
@@ -995,8 +1075,174 @@ window.addEventListener(
         lastMouseTime =
             now;
 
+    },
+    {
+        passive: true
     }
 );
+
+
+/*
+   Dibuja cada estela como una forma
+   alargada y difuminada siguiendo
+   el movimiento del ratón.
+*/
+
+function drawBrushMark(mark) {
+
+    const now =
+        performance.now();
+
+    const age =
+        now -
+        mark.created;
+
+    const progress =
+        Math.min(
+            age /
+            mark.duration,
+            1
+        );
+
+    if (progress >= 1) {
+        return false;
+    }
+
+    /*
+       Fade muy suave:
+       aparece rápido y desaparece
+       progresivamente.
+    */
+
+    let opacity;
+
+    if (progress < 0.18) {
+
+        opacity =
+            progress / 0.18;
+
+    } else {
+
+        opacity =
+            1 -
+            (
+                (progress - 0.18) /
+                0.82
+            );
+    }
+
+    opacity =
+        Math.max(
+            0,
+            Math.min(
+                1,
+                opacity
+            )
+        );
+
+
+    ctx.save();
+
+    ctx.translate(
+        mark.x,
+        mark.y
+    );
+
+    ctx.rotate(
+        mark.angle
+    );
+
+    ctx.globalAlpha =
+        opacity * 0.8;
+
+    /*
+       Gradiente longitudinal.
+    */
+
+    const gradient =
+        ctx.createLinearGradient(
+            -mark.length,
+            0,
+            mark.length,
+            0
+        );
+
+    gradient.addColorStop(
+        0,
+        "rgba(0,0,0,0)"
+    );
+
+    gradient.addColorStop(
+        0.2,
+        "rgba(0,0,0,0.8)"
+    );
+
+    gradient.addColorStop(
+        0.5,
+        "rgba(0,0,0,1)"
+    );
+
+    gradient.addColorStop(
+        0.8,
+        "rgba(0,0,0,0.8)"
+    );
+
+    gradient.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
+
+    ctx.fillStyle =
+        gradient;
+
+
+    /*
+       Forma suave tipo pincel.
+    */
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -mark.length,
+        0
+    );
+
+    ctx.quadraticCurveTo(
+        -mark.length * 0.55,
+        -mark.width,
+        0,
+        -mark.width * 0.65
+    );
+
+    ctx.quadraticCurveTo(
+        mark.length * 0.55,
+        -mark.width,
+        mark.length,
+        0
+    );
+
+    ctx.quadraticCurveTo(
+        mark.length * 0.55,
+        mark.width,
+        0,
+        mark.width * 0.65
+    );
+
+    ctx.quadraticCurveTo(
+        -mark.length * 0.55,
+        mark.width,
+        -mark.length,
+        0
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+    ctx.restore();
+
+    return true;
+}
 
 
 function animateFog() {
@@ -1006,62 +1252,9 @@ function animateFog() {
     ctx.globalCompositeOperation =
         "destination-out";
 
-    const currentTime =
-        performance.now();
-
     brushMarks =
         brushMarks.filter(
-            mark => {
-
-                const age =
-                    currentTime -
-                    mark.created;
-
-                mark.life =
-                    1 -
-                    age /
-                    mark.maxLife;
-
-                if (
-                    mark.life <= 0
-                ) {
-
-                    return false;
-                }
-
-                ctx.save();
-
-                ctx.translate(
-                    mark.x,
-                    mark.y
-                );
-
-                ctx.rotate(
-                    mark.angle
-                );
-
-                ctx.globalAlpha =
-                    mark.life * 0.8;
-
-                ctx.beginPath();
-
-                ctx.ellipse(
-                    0,
-                    0,
-                    mark.width,
-                    mark.height,
-                    0,
-                    0,
-                    Math.PI * 2
-                );
-
-                ctx.fill();
-
-                ctx.restore();
-
-                return true;
-
-            }
+            drawBrushMark
         );
 
     requestAnimationFrame(
@@ -1120,7 +1313,6 @@ canvas.addEventListener(
 
 /* =========================================================
    ANIMACIONES DEL SCROLL
-   OPTIMIZADAS
 ========================================================= */
 
 const highlightsTitle =
@@ -1164,7 +1356,8 @@ const youtubeWrapper =
     );
 
 
-let scrollTicking = false;
+let scrollTicking =
+    false;
 
 
 function clamp(
@@ -1183,21 +1376,17 @@ function clamp(
 }
 
 
-/*
-    Toda la animación visual se ejecuta
-    como máximo una vez por frame.
-*/
-
 function updateScroll() {
 
-    scrollTicking = false;
+    scrollTicking =
+        false;
 
     const windowHeight =
         window.innerHeight;
 
 
     /* =====================================================
-       TÍTULO HIGHLIGHTS
+       HIGHLIGHTS
     ===================================================== */
 
     const titleRect =
@@ -1224,7 +1413,7 @@ function updateScroll() {
 
 
     /* =====================================================
-       NOMBRE FA
+       FA 470CC
     ===================================================== */
 
     const nameRect =
@@ -1303,10 +1492,8 @@ function updateScroll() {
 
 
     /* =====================================================
-       CONTROL DEL VÍDEO
-
-       SOLO REPRODUCE CUANDO ESTÁ
-       APROXIMADAMENTE CENTRADO.
+       REPRODUCCIÓN DEL VÍDEO
+       SOLO CUANDO ESTÁ CENTRADO
     ===================================================== */
 
     const videoCenter =
@@ -1323,18 +1510,16 @@ function updateScroll() {
         );
 
 
-    /*
-       Zona de reproducción:
-       aproximadamente ±180 px
-       respecto al centro.
-    */
-
-    const isCentered =
-        distanceFromCenter <
+    const centerZone =
         Math.min(
             180,
             windowHeight * 0.18
         );
+
+
+    const isCentered =
+        distanceFromCenter <
+        centerZone;
 
 
     if (isCentered) {
@@ -1411,17 +1596,12 @@ function updateScroll() {
 }
 
 
-/*
-    RequestAnimationFrame para evitar
-    recalcular continuamente mientras
-    el navegador está dibujando.
-*/
-
 function requestScrollUpdate() {
 
     if (!scrollTicking) {
 
-        scrollTicking = true;
+        scrollTicking =
+            true;
 
         requestAnimationFrame(
             updateScroll
@@ -1446,8 +1626,6 @@ window.addEventListener(
     }
 );
 
-
-/* Primera actualización */
 
 updateScroll();
 
